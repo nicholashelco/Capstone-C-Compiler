@@ -1,0 +1,9 @@
+%{
+    // Definitions
+%}
+
+%%
+    // Rules
+%%
+
+    // User code
