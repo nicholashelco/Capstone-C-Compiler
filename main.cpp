@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <FlexLexer.h>
 
 int main(){
 
