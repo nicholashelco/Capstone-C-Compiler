@@ -1,3 +1,0 @@
-/home/nickjar/Capstone-C-Compiler/cmake-build-debug/CMakeFiles/Capstone_C_Compiler.dir
-/home/nickjar/Capstone-C-Compiler/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/nickjar/Capstone-C-Compiler/cmake-build-debug/CMakeFiles/rebuild_cache.dir
