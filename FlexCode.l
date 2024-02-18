@@ -117,13 +117,31 @@ char                    return(CHAR_TYPE_TOKEN);
 /* function to install the lexeme of an ID,
    whose first char is pointed to by yytext,
    and whose length is yylang, into the symbol
-   table and return a pointer to */
-int* installID(){}
+   table and return a pointer to for yylval */
+int* installID(){
+
+    // add yytext lexeme to lexemes char array
+
+    // add <yytext, pair<offset, tokenType> > to the LexemeTable
+
+    // return offset, which becomes yylval (I think)
+
+}
 
 
 /* function to install the lexeme of a number,
    whose first char is pointed to by yytext,
    and whose length is yylang, into the symbol
-   table and return a pointer to */
-int* installNum(){}
+   table and return a pointer to for yylval */
+int* installNum(){
+
+    // add yytext lexeme to lexemes char array
+
+
+    // add <yytext, pair<offset, tokenType> > to the LexemeTable
+
+
+    // return offset, which becomes yylval (I think)
+
+}
 
