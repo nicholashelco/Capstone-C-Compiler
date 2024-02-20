@@ -6,19 +6,25 @@
 #include <FlexLexer.h>
 #include <map>
 
+#include "TokenNames.tab.h"
+
+
 void doubleArr(char*, int&);
-void addToLexSymbolTable(std::string, char*, int&, std::map<std::string, std::pair<uint32_t, uint32_t> > &);
+void addToLexSymbolTable(std::string, char*, int&, int&, std::map<std::string, std::pair<uint32_t, uint32_t> > &);
 
 int main(int argc, char *argv[]){
 
     // The lexical symbol table:
     int lexemesLength = 1024;  // start with 1024 chars
     char* lexemes = new char[lexemesLength];
-    lexemes[255] = '\0';
+    int curOffset = 0;  // first index available for writing
+
+    lexemes[lexemesLength-1] = '\0';
     std::map<std::string, std::pair<uint32_t, uint32_t> > LexemeTable;
     //                             <offset,   tokenType>
 
     // Add all keywords to the symbol table
+
 
 
     // load the c file named in argv
@@ -64,25 +70,33 @@ void doubleArr(char* old, int &n){
  *
  * nLexeme - the new lexeme to be added
  * lexemes - the c-string containing all lexemes
- * lexemesLength - the length of lexemes
+ * curOffset - first available index in lexemes
+ * lexemesLength - the current length of lexemes
  * LexemeTable - the lexical symbol table
  *
  * This function will double the length of lexemes array if
  * nLexeme will not fit in the current array.
  * */
-void addToLexSymbolTable(std::string nLexeme, char* lexemes, int &lexemesLength, std::map<std::string, std::pair<uint32_t, uint32_t> > &LexemeTable){
+void addToLexSymbolTable(std::string nLexeme, char* lexemes, int &curOffset, int &lexemesLength, std::map<std::string, std::pair<uint32_t, uint32_t> > &LexemeTable){
 
-    // if nLexeme will not fit in lexemes:
-    if(){
+    // if nLexeme will not fit in remaining space in lexemes:
+    if(lexemesLength - curOffset < nLexeme.size() ){
 
         // double the length of lexemes
         doubleArr(lexemes, lexemesLength);
     }
 
     // Now add nLexeme to lexemes
+    int strLen = nLexeme.size();
+    for(int i=0; i<strLen; i++){
+        lexemes[curOffset] = nLexeme[i];
+        curOffset++;
+    }
 
-
-    // Create new entry in symbol table
+    // Create new entry in symbol table                         // This 0 should be the token type of nLexeme!
+    std::pair<uint32_t, uint32_t> newPair (curOffset-strLen, 0);
+    // map.insert requires a single argument - pair<key, value>
+    LexemeTable.insert(std::pair<std::string, std::pair<uint32_t, uint32_t> > (nLexeme, newPair) );
 
 }
 
