@@ -6,7 +6,7 @@
 #include <FlexLexer.h>
 #include <map>
 
-#include "TokenNames.tab.h"
+#include "YaccCode.tab.hpp"
 
 
 void doubleArr(char*, int&);

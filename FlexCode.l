@@ -30,22 +30,18 @@ id      (_|{letter})({letter}|{digit}|_)*
 {ws}+  { /* do nothing */ }
 
  /* Keywords */
-if                      return(IF_TOKEN);
-else                    return(ELSE_TOKEN);
-for                     return(FOR_TOKEN);
-do                      return(DO_TOKEN);
-while                   return(WHILE_TOKEN);
-short int               return(SHORT_INT_TYPE_TOKEN);
-unsigned short int      return(UN_SHORT_INT_TYPE_TOKEN);
-unsigned int            return(UN_INT_TYPE_TOKEN);
-int                     return(INT_TYPE_TOKEN);
-long int                return(LONG_INT_TYPE_TOKEN);
-unsigned long int       return(UN_LONG_INT_TYPE_TOKEN);
-long long int           return(LONG_LONG_INT_TYPE_TOKEN);
-unsigned long long int  return(UN_LONG_LONG_INT_TYPE_TOKEN);
-float                   return(FLOAT_TYPE_TOKEN);
-double                  return(DOUBLE_TYPE_TOKEN);
-char                    return(CHAR_TYPE_TOKEN);
+if        return(IF_TOKEN);
+else      return(ELSE_TOKEN);
+for       return(FOR_TOKEN);
+do        return(DO_TOKEN);
+while     return(WHILE_TOKEN);
+short     return(SHORT_TYPE_TOKEN);
+int       return(INT_TYPE_TOKEN);
+long      return(LONG_TYPE_TOKEN);
+unsigned  return(UNSIGNED_TYPE_TOKEN);
+float     return(FLOAT_TYPE_TOKEN);
+double    return(DOUBLE_TYPE_TOKEN);
+char      return(CHAR_TYPE_TOKEN);
 
  /* identifiers */
 {id}  {yylval = installID(); return(ID_TOKEN); }
@@ -92,7 +88,6 @@ char                    return(CHAR_TYPE_TOKEN);
 "!"     return(LOGICAL_NOT_TOKEN);
 
  /* bitwise operators */
-"&"|"\|"|"\^"|"<<"|">>"|"~"
 "&"   return(BITWISE_AND_TOKEN);
 "\|"  return(BITWISE_OR_TOKEN);
 "\^"  return(BITWISE_XOR_TOKEN);

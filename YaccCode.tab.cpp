@@ -67,11 +67,11 @@
 
 
 /* First part of user prologue.  */
-#line 2 "TokenNames.y"
+#line 2 "YaccCode.ypp"
 
 
 
-#line 75 "TokenNames.tab.c"
+#line 75 "YaccCode.tab.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -94,7 +94,7 @@
 #  endif
 # endif
 
-#include "TokenNames.tab.h"
+#include "YaccCode.tab.hpp"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -107,58 +107,54 @@ enum yysymbol_kind_t
   YYSYMBOL_FOR_TOKEN = 5,                  /* FOR_TOKEN  */
   YYSYMBOL_DO_TOKEN = 6,                   /* DO_TOKEN  */
   YYSYMBOL_WHILE_TOKEN = 7,                /* WHILE_TOKEN  */
-  YYSYMBOL_SHORT_INT_TYPE_TOKEN = 8,       /* SHORT_INT_TYPE_TOKEN  */
-  YYSYMBOL_UN_SHORT_INT_TYPE_TOKEN = 9,    /* UN_SHORT_INT_TYPE_TOKEN  */
-  YYSYMBOL_UN_INT_TYPE_TOKEN = 10,         /* UN_INT_TYPE_TOKEN  */
-  YYSYMBOL_INT_TYPE_TOKEN = 11,            /* INT_TYPE_TOKEN  */
-  YYSYMBOL_LONG_INT_TYPE_TOKEN = 12,       /* LONG_INT_TYPE_TOKEN  */
-  YYSYMBOL_UN_LONG_INT_TYPE_TOKEN = 13,    /* UN_LONG_INT_TYPE_TOKEN  */
-  YYSYMBOL_LONG_LONG_INT_TYPE_TOKEN = 14,  /* LONG_LONG_INT_TYPE_TOKEN  */
-  YYSYMBOL_UN_LONG_LONG_INT_TYPE_TOKEN = 15, /* UN_LONG_LONG_INT_TYPE_TOKEN  */
-  YYSYMBOL_FLOAT_TYPE_TOKEN = 16,          /* FLOAT_TYPE_TOKEN  */
-  YYSYMBOL_DOUBLE_TYPE_TOKEN = 17,         /* DOUBLE_TYPE_TOKEN  */
-  YYSYMBOL_CHAR_TYPE_TOKEN = 18,           /* CHAR_TYPE_TOKEN  */
-  YYSYMBOL_ID_TOKEN = 19,                  /* ID_TOKEN  */
-  YYSYMBOL_L_PAREN_TOKEN = 20,             /* L_PAREN_TOKEN  */
-  YYSYMBOL_R_PAREN_TOKEN = 21,             /* R_PAREN_TOKEN  */
-  YYSYMBOL_L_BRACKET_TOKEN = 22,           /* L_BRACKET_TOKEN  */
-  YYSYMBOL_R_BRACKET_TOKEN = 23,           /* R_BRACKET_TOKEN  */
-  YYSYMBOL_L_BRACE_TOKEN = 24,             /* L_BRACE_TOKEN  */
-  YYSYMBOL_R_BRACE_TOKEN = 25,             /* R_BRACE_TOKEN  */
-  YYSYMBOL_PLUS_TOKEN = 26,                /* PLUS_TOKEN  */
-  YYSYMBOL_MINUS_TOKEN = 27,               /* MINUS_TOKEN  */
-  YYSYMBOL_MULTIPLY_TOKEN = 28,            /* MULTIPLY_TOKEN  */
-  YYSYMBOL_DIVIDE_TOKEN = 29,              /* DIVIDE_TOKEN  */
-  YYSYMBOL_MODULO_TOKEN = 30,              /* MODULO_TOKEN  */
-  YYSYMBOL_INCREMENT_TOKEN = 31,           /* INCREMENT_TOKEN  */
-  YYSYMBOL_DECREMENT_TOKEN = 32,           /* DECREMENT_TOKEN  */
-  YYSYMBOL_ASSN_TOKEN = 33,                /* ASSN_TOKEN  */
-  YYSYMBOL_ADD_ASSN_TOKEN = 34,            /* ADD_ASSN_TOKEN  */
-  YYSYMBOL_MINUS_ASSN_TOKEN = 35,          /* MINUS_ASSN_TOKEN  */
-  YYSYMBOL_MULTI_ASSN_TOKEN = 36,          /* MULTI_ASSN_TOKEN  */
-  YYSYMBOL_DIVIDE_ASSN_TOKEN = 37,         /* DIVIDE_ASSN_TOKEN  */
-  YYSYMBOL_MODULO_ASSN_TOKEN = 38,         /* MODULO_ASSN_TOKEN  */
-  YYSYMBOL_AND_ASSN_TOKEN = 39,            /* AND_ASSN_TOKEN  */
-  YYSYMBOL_OR_ASSN_TOKEN = 40,             /* OR_ASSN_TOKEN  */
-  YYSYMBOL_XOR_ASSN_TOKEN = 41,            /* XOR_ASSN_TOKEN  */
-  YYSYMBOL_EQUAL_COMP_TOKEN = 42,          /* EQUAL_COMP_TOKEN  */
-  YYSYMBOL_NOT_EQUAL_COMP_TOKEN = 43,      /* NOT_EQUAL_COMP_TOKEN  */
-  YYSYMBOL_LESS_THAN_COMP_TOKEN = 44,      /* LESS_THAN_COMP_TOKEN  */
-  YYSYMBOL_GREATER_THAN_COMP_TOKEN = 45,   /* GREATER_THAN_COMP_TOKEN  */
-  YYSYMBOL_LESS_THAN_EQUAL_COMP_TOKEN = 46, /* LESS_THAN_EQUAL_COMP_TOKEN  */
-  YYSYMBOL_GREATER_THAN_EQUAL_COMP_TOKEN = 47, /* GREATER_THAN_EQUAL_COMP_TOKEN  */
-  YYSYMBOL_LOGICAL_AND_TOKEN = 48,         /* LOGICAL_AND_TOKEN  */
-  YYSYMBOL_LOGICAL_OR_TOKEN = 49,          /* LOGICAL_OR_TOKEN  */
-  YYSYMBOL_LOGICAL_NOT_TOKEN = 50,         /* LOGICAL_NOT_TOKEN  */
-  YYSYMBOL_BITWISE_AND_TOKEN = 51,         /* BITWISE_AND_TOKEN  */
-  YYSYMBOL_BITWISE_OR_TOKEN = 52,          /* BITWISE_OR_TOKEN  */
-  YYSYMBOL_BITWISE_XOR_TOKEN = 53,         /* BITWISE_XOR_TOKEN  */
-  YYSYMBOL_BITWISE_LSHIFT_TOKEN = 54,      /* BITWISE_LSHIFT_TOKEN  */
-  YYSYMBOL_BITWISE_RSHIFT_TOKEN = 55,      /* BITWISE_RSHIFT_TOKEN  */
-  YYSYMBOL_BITWISE_NOT_TOKEN = 56,         /* BITWISE_NOT_TOKEN  */
-  YYSYMBOL_NUM_TOKEN = 57,                 /* NUM_TOKEN  */
-  YYSYMBOL_YYACCEPT = 58,                  /* $accept  */
-  YYSYMBOL_filler = 59                     /* filler  */
+  YYSYMBOL_SHORT_TYPE_TOKEN = 8,           /* SHORT_TYPE_TOKEN  */
+  YYSYMBOL_INT_TYPE_TOKEN = 9,             /* INT_TYPE_TOKEN  */
+  YYSYMBOL_LONG_TYPE_TOKEN = 10,           /* LONG_TYPE_TOKEN  */
+  YYSYMBOL_UNSIGNED_TYPE_TOKEN = 11,       /* UNSIGNED_TYPE_TOKEN  */
+  YYSYMBOL_FLOAT_TYPE_TOKEN = 12,          /* FLOAT_TYPE_TOKEN  */
+  YYSYMBOL_DOUBLE_TYPE_TOKEN = 13,         /* DOUBLE_TYPE_TOKEN  */
+  YYSYMBOL_CHAR_TYPE_TOKEN = 14,           /* CHAR_TYPE_TOKEN  */
+  YYSYMBOL_ID_TOKEN = 15,                  /* ID_TOKEN  */
+  YYSYMBOL_L_PAREN_TOKEN = 16,             /* L_PAREN_TOKEN  */
+  YYSYMBOL_R_PAREN_TOKEN = 17,             /* R_PAREN_TOKEN  */
+  YYSYMBOL_L_BRACKET_TOKEN = 18,           /* L_BRACKET_TOKEN  */
+  YYSYMBOL_R_BRACKET_TOKEN = 19,           /* R_BRACKET_TOKEN  */
+  YYSYMBOL_L_BRACE_TOKEN = 20,             /* L_BRACE_TOKEN  */
+  YYSYMBOL_R_BRACE_TOKEN = 21,             /* R_BRACE_TOKEN  */
+  YYSYMBOL_PLUS_TOKEN = 22,                /* PLUS_TOKEN  */
+  YYSYMBOL_MINUS_TOKEN = 23,               /* MINUS_TOKEN  */
+  YYSYMBOL_MULTIPLY_TOKEN = 24,            /* MULTIPLY_TOKEN  */
+  YYSYMBOL_DIVIDE_TOKEN = 25,              /* DIVIDE_TOKEN  */
+  YYSYMBOL_MODULO_TOKEN = 26,              /* MODULO_TOKEN  */
+  YYSYMBOL_INCREMENT_TOKEN = 27,           /* INCREMENT_TOKEN  */
+  YYSYMBOL_DECREMENT_TOKEN = 28,           /* DECREMENT_TOKEN  */
+  YYSYMBOL_ASSN_TOKEN = 29,                /* ASSN_TOKEN  */
+  YYSYMBOL_ADD_ASSN_TOKEN = 30,            /* ADD_ASSN_TOKEN  */
+  YYSYMBOL_MINUS_ASSN_TOKEN = 31,          /* MINUS_ASSN_TOKEN  */
+  YYSYMBOL_MULTI_ASSN_TOKEN = 32,          /* MULTI_ASSN_TOKEN  */
+  YYSYMBOL_DIVIDE_ASSN_TOKEN = 33,         /* DIVIDE_ASSN_TOKEN  */
+  YYSYMBOL_MODULO_ASSN_TOKEN = 34,         /* MODULO_ASSN_TOKEN  */
+  YYSYMBOL_AND_ASSN_TOKEN = 35,            /* AND_ASSN_TOKEN  */
+  YYSYMBOL_OR_ASSN_TOKEN = 36,             /* OR_ASSN_TOKEN  */
+  YYSYMBOL_XOR_ASSN_TOKEN = 37,            /* XOR_ASSN_TOKEN  */
+  YYSYMBOL_EQUAL_COMP_TOKEN = 38,          /* EQUAL_COMP_TOKEN  */
+  YYSYMBOL_NOT_EQUAL_COMP_TOKEN = 39,      /* NOT_EQUAL_COMP_TOKEN  */
+  YYSYMBOL_LESS_THAN_COMP_TOKEN = 40,      /* LESS_THAN_COMP_TOKEN  */
+  YYSYMBOL_GREATER_THAN_COMP_TOKEN = 41,   /* GREATER_THAN_COMP_TOKEN  */
+  YYSYMBOL_LESS_THAN_EQUAL_COMP_TOKEN = 42, /* LESS_THAN_EQUAL_COMP_TOKEN  */
+  YYSYMBOL_GREATER_THAN_EQUAL_COMP_TOKEN = 43, /* GREATER_THAN_EQUAL_COMP_TOKEN  */
+  YYSYMBOL_LOGICAL_AND_TOKEN = 44,         /* LOGICAL_AND_TOKEN  */
+  YYSYMBOL_LOGICAL_OR_TOKEN = 45,          /* LOGICAL_OR_TOKEN  */
+  YYSYMBOL_LOGICAL_NOT_TOKEN = 46,         /* LOGICAL_NOT_TOKEN  */
+  YYSYMBOL_BITWISE_AND_TOKEN = 47,         /* BITWISE_AND_TOKEN  */
+  YYSYMBOL_BITWISE_OR_TOKEN = 48,          /* BITWISE_OR_TOKEN  */
+  YYSYMBOL_BITWISE_XOR_TOKEN = 49,         /* BITWISE_XOR_TOKEN  */
+  YYSYMBOL_BITWISE_LSHIFT_TOKEN = 50,      /* BITWISE_LSHIFT_TOKEN  */
+  YYSYMBOL_BITWISE_RSHIFT_TOKEN = 51,      /* BITWISE_RSHIFT_TOKEN  */
+  YYSYMBOL_BITWISE_NOT_TOKEN = 52,         /* BITWISE_NOT_TOKEN  */
+  YYSYMBOL_NUM_TOKEN = 53,                 /* NUM_TOKEN  */
+  YYSYMBOL_YYACCEPT = 54,                  /* $accept  */
+  YYSYMBOL_filler = 55                     /* filler  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -489,7 +485,7 @@ union yyalloc
 #define YYLAST   0
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  58
+#define YYNTOKENS  54
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  2
 /* YYNRULES -- Number of rules.  */
@@ -498,7 +494,7 @@ union yyalloc
 #define YYNSTATES  3
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   312
+#define YYMAXUTOK   308
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -542,15 +538,14 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50,    51,    52,    53,    54,
-      55,    56,    57
+      45,    46,    47,    48,    49,    50,    51,    52,    53
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    84,    84
+       0,    80,    80
 };
 #endif
 
@@ -567,10 +562,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "IF_TOKEN",
-  "ELSE_TOKEN", "FOR_TOKEN", "DO_TOKEN", "WHILE_TOKEN",
-  "SHORT_INT_TYPE_TOKEN", "UN_SHORT_INT_TYPE_TOKEN", "UN_INT_TYPE_TOKEN",
-  "INT_TYPE_TOKEN", "LONG_INT_TYPE_TOKEN", "UN_LONG_INT_TYPE_TOKEN",
-  "LONG_LONG_INT_TYPE_TOKEN", "UN_LONG_LONG_INT_TYPE_TOKEN",
+  "ELSE_TOKEN", "FOR_TOKEN", "DO_TOKEN", "WHILE_TOKEN", "SHORT_TYPE_TOKEN",
+  "INT_TYPE_TOKEN", "LONG_TYPE_TOKEN", "UNSIGNED_TYPE_TOKEN",
   "FLOAT_TYPE_TOKEN", "DOUBLE_TYPE_TOKEN", "CHAR_TYPE_TOKEN", "ID_TOKEN",
   "L_PAREN_TOKEN", "R_PAREN_TOKEN", "L_BRACKET_TOKEN", "R_BRACKET_TOKEN",
   "L_BRACE_TOKEN", "R_BRACE_TOKEN", "PLUS_TOKEN", "MINUS_TOKEN",
@@ -647,13 +640,13 @@ static const yytype_int8 yycheck[] =
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    59,     0
+       0,    55,     0
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    58,    59
+       0,    54,    55
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -1123,7 +1116,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1127 "TokenNames.tab.c"
+#line 1120 "YaccCode.tab.cpp"
 
       default: break;
     }
