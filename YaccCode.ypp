@@ -9,6 +9,9 @@
 %token FOR_TOKEN
 %token DO_TOKEN
 %token WHILE_TOKEN
+%token RETURN_TOKEN
+%token BREAK_TOKEN
+%token CONTINUE_TOKEN
 
 %token SHORT_TYPE_TOKEN
 %token INT_TYPE_TOKEN
@@ -17,26 +20,36 @@
 %token FLOAT_TYPE_TOKEN
 %token DOUBLE_TYPE_TOKEN
 %token CHAR_TYPE_TOKEN
+%token STRUCT_TYPE_TOKEN
+%token ENUM_TYPE_TOKEN
+%token UNION_TYPE_TOKEN
+%token VOID_TYPE_TOKEN
+
 
 /* identifiers */
 %token ID_TOKEN
 
- /* parentheses, braces, and brackets */
+ /* parentheses, braces, brackets, punctuation */
 %token L_PAREN_TOKEN
 %token R_PAREN_TOKEN
 %token L_BRACKET_TOKEN
 %token R_BRACKET_TOKEN
 %token L_BRACE_TOKEN
 %token R_BRACE_TOKEN
+%token COMMA_TOKEN
+%token DOT_TOKEN
+%token SEMICOLON_TOKEN
+%token COLON_TOKEN
+%token QUESTION_TOKEN
 
  /* arithmetic operators */
 %token PLUS_TOKEN
 %token MINUS_TOKEN
-%token MULTIPLY_TOKEN
+%token ASTERISK_TOKEN
 %token DIVIDE_TOKEN
 %token MODULO_TOKEN
-%token INCREMENT_TOKEN
-%token DECREMENT_TOKEN
+%right INCREMENT_TOKEN
+%right DECREMENT_TOKEN
 
  /* Assignment operators */
 %token ASSN_TOKEN
@@ -63,15 +76,19 @@
 %token LOGICAL_NOT_TOKEN
 
  /* bitwise operators */
-%token BITWISE_AND_TOKEN
+%token AMP_TOKEN
 %token BITWISE_OR_TOKEN
 %token BITWISE_XOR_TOKEN
 %token BITWISE_LSHIFT_TOKEN
 %token BITWISE_RSHIFT_TOKEN
 %token BITWISE_NOT_TOKEN
 
- /* Numbers: ints and floating-point */
-%token NUM_TOKEN
+ /* Literals: ints, floating-point, chars, strings */
+%token LIT_NUM_TOKEN
+%token LIT_CHAR_TOKEN
+%token LIT_STRING_TOKEN
+%token LIT_CHAR_TOKEN
+%token LIT_STRING_TOKEN
 
 
 

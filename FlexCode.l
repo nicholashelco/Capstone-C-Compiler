@@ -35,6 +35,10 @@ else      return(ELSE_TOKEN);
 for       return(FOR_TOKEN);
 do        return(DO_TOKEN);
 while     return(WHILE_TOKEN);
+return    return(RETURN_TOKEN);
+break     return(BREAK_TOKEN);
+continue  return(CONTINUE_TOKEN);
+
 short     return(SHORT_TYPE_TOKEN);
 int       return(INT_TYPE_TOKEN);
 long      return(LONG_TYPE_TOKEN);
@@ -42,22 +46,35 @@ unsigned  return(UNSIGNED_TYPE_TOKEN);
 float     return(FLOAT_TYPE_TOKEN);
 double    return(DOUBLE_TYPE_TOKEN);
 char      return(CHAR_TYPE_TOKEN);
+struct    return(STRUCT_TYPE_TOKEN);
+enum      return(ENUM_TYPE_TOKEN);
+union     return(UNION_TYPE_TOKEN);
+void      return(VOID_TYPE_TOKEN);
+
+
+
+
 
  /* identifiers */
 {id}  {yylval = installID(); return(ID_TOKEN); }
 
- /* parentheses, braces, and brackets (unsure if these need \'s or not) */
+ /* parentheses, braces, brackets, punctuation */
 "("   return(L_PAREN_TOKEN);
 ")"   return(R_PAREN_TOKEN);
 "["   return(L_BRACKET_TOKEN);
 "]"   return(R_BRACKET_TOKEN);
 "{"   return(L_BRACE_TOKEN);
 "}"   return(R_BRACE_TOKEN);
+","   return(COMMA_TOKEN);
+"."   return(DOT_TOKEN);
+";"   return(SEMICOLON_TOKEN);
+":"   return(COLON_TOKEN);
+"?"   return(QUESTION_TOKEN);
 
  /* arithmetic operators */
 "+"   return(PLUS_TOKEN);
 "-"   return(MINUS_TOKEN);
-"*"   return(MULTIPLY_TOKEN);
+"*"   return(ASTERISK_TOKEN);
 "/"   return(DIVIDE_TOKEN);
 "%"   return(MODULO_TOKEN);
 "++"  return(INCREMENT_TOKEN);
@@ -88,17 +105,19 @@ char      return(CHAR_TYPE_TOKEN);
 "!"     return(LOGICAL_NOT_TOKEN);
 
  /* bitwise operators */
-"&"   return(BITWISE_AND_TOKEN);
+"&"   return(AMP_TOKEN);
 "\|"  return(BITWISE_OR_TOKEN);
 "\^"  return(BITWISE_XOR_TOKEN);
 "<<"  return(BITWISE_LSHIFT_TOKEN);
 ">>"  return(BITWISE_RSHIFT_TOKEN);
 "~"   return(BITWISE_NOT_TOKEN);
 
- /* Numbers: ints and floating-point */
-({digit}+)|"0x"({digit}|[a-fA-F])+                   {yylval = installNum(); return(NUM_TOKEN); }
-({digit}+\.{digit}*|\.{digit}+)([Ee][+-]?{digit}+)?  {yylval = installNum(); return(NUM_TOKEN); }
-
+ /* Literals: ints, floating-point, chars, strings */
+(0)|(0x0)|([1-9]{digit}*)|(0x[1-9]|[a-fA-F])({digit}|[a-fA-F])*   {yylval = installNum(); return(LIT_NUM_TOKEN);    }
+([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {yylval = installNum(); return(LIT_NUM_TOKEN);    }
+ /* flex documentation says a . means one of any character */
+\'.\'                                                             {yylval = installNum(); return(LIT_CHAR_TOKEN);   }
+\".+\"                                                            {yylval = installNum(); return(LIT_STRING_TOKEN); }
 
 
 %%
