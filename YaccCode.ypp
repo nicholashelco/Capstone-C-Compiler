@@ -94,4 +94,36 @@
 
 %%
 
-filler:
+
+ /* Expressions, Terms, Factors */
+expr   : term '+' expr    {}
+       | term '-' expr    {}
+       | term             {}
+       ;
+
+term   : factor '*' term  {}
+       | factor '/' term  {}
+       | factor           {}
+       ;
+
+factor : '(' expr ')'     {}
+       | id               {}
+       ;
+
+
+ /* if statements */
+ifStmt          : matched_ifStmt {}
+                | open_ifStmt    {}
+                ;
+
+matched_ifStmt  : if '(' expr ')' '{' matched_ifStmt '}' else '{' matched_ifStmt '}' {}
+                ;
+
+open_ifStmt     : if '(' expr ')' '{' ifStmt '}' {}
+                | if '(' expr ')' '{' matched_ifStmt '}' else '{' open_ifStmt '}'    {}
+
+
+ /* while loops */
+
+
+ /* for loops */
