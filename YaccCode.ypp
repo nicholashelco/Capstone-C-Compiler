@@ -50,6 +50,7 @@
 %token MODULO_TOKEN
 %right INCREMENT_TOKEN
 %right DECREMENT_TOKEN
+%right U_MINUS
 
  /* Assignment operators */
 %token ASSN_TOKEN
@@ -96,9 +97,11 @@
 
 
  /* Expressions, Terms, Factors */
-expr   : term '+' expr    {}
-       | term '-' expr    {}
-       | term             {}
+expr   : term '+' expr           {}
+       | term '-' expr           {}
+       | '(' expr ')'            {}
+       | '-' expr %prec U_MINUS  {}
+       | term                    {}
        ;
 
 term   : factor '*' term  {}
