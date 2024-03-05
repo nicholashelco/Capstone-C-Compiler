@@ -3,7 +3,16 @@
 
 %}
 
-/* keywords */
+
+ /* I used this page as a reference for precedence:               */
+ /* https://en.cppreference.com/w/c/language/operator_precedence  */
+
+
+ /* No Precedence necessary */
+%token L_BRACE
+%token R_BRACE
+%token SEMICOLON
+
 %token IF
 %token ELSE
 %token FOR
@@ -25,67 +34,84 @@
 %token UNION_TYPE
 %token VOID_TYPE
 
-/* identifiers */
 %token ID
-
- /* parentheses, braces, brackets, punctuation */
-%token L_PAREN
-%token R_PAREN
-%token L_BRACKET
-%token R_BRACKET
-%token L_BRACE
-%token R_BRACE
-%token COMMA
-%token DOT
-%token SEMICOLON
-%token COLON
-%token QUESTION
-
- /* arithmetic operators */
-%left  PLUS      MINUS
-%left  ASTERISK  DIVIDE  MODULO
-%right INCREMENT
-%right DECREMENT
-%right U_MINUS
-
- /* Assignment operators */
-%token ASSN
-%token ADD_ASSN
-%token MINUS_ASSN
-%token MULTI_ASSN
-%token DIVIDE_ASSN
-%token MODULO_ASSN
-%token AND_ASSN
-%token OR_ASSN
-%token XOR_ASSN
-
- /* comparison operators */
-%token EQUAL_COMP
-%token NOT_EQUAL_COMP
-%token LESS_THAN_COMP
-%token GREATER_THAN_COMP
-%token LESS_THAN_EQUAL_COMP
-%token GREATER_THAN_EQUAL_COMP
-
- /* logical operators */
-%token LOGICAL_AND
-%token LOGICAL_OR
-%token LOGICAL_NOT
-
- /* bitwise operators */
-%token AMP
-%token BITWISE_OR
-%token BITWISE_XOR
-%token BITWISE_LSHIFT
-%token BITWISE_RSHIFT
-%token BITWISE_NOT
-
- /* Literals: ints, floating-point, chars, strings */
 %token LIT_NUM
 %token LIT_CHAR
 %token LIT_STRING
-%token LIT_CHAR
-%token LIT_STRING
+
+
+ /* Level 15 Precedence */
+%token COMMA
+
+
+ /* Level 14 Precedence */
+%token AND_ASSN   OR_ASSN     XOR_ASSN
+%token MULTI_ASSN DIVIDE_ASSN MODULO_ASSN
+%token ADD_ASSN   MINUS_ASSN
+%token ASSN
+
+
+ /* Level 13 Precedence */
+ /* TERNARY */
+%token COLON
+%token QUESTION
+
+
+ /* Level 12 Precedence */
+%token LOGICAL_OR
+
+
+ /* Level 11 Precedence */
+%token LOGICAL_AND
+
+
+ /* Level 10 Precedence */
+%token BITWISE_OR
+
+
+ /* Level 9 Precedence */
+%token BITWISE_XOR
+
+
+ /* Level 8 Precedence */
+ /* bitwise AND */
+
+
+ /* Level 7 Precedence */
+%token EQUAL_COMP NOT_EQUAL_COMP
+
+
+ /* Level 6 Precedence */
+%token GREATER_THAN_COMP GREATER_THAN_EQUAL_COMP
+%token LESS_THAN_COMP    LESS_THAN_EQUAL_COMP
+
+
+ /* Level 5 Precedence */
+%token BITWISE_LSHIFT BITWISE_RSHIFT
+
+
+ /* Level 4 Precedence */
+%left PLUS MINUS
+
+
+ /* Level 3 Precedence */
+%left ASTERISK DIVIDE MODULO
+
+
+ /* Level 2 Precedence */
+ /* Sizeof */
+%token    AMP
+ /* DEREFERENCE */
+ /* TYPE CAST */
+%token    LOGICAL_NOT BITWISE_NOT
+%nonassoc U_MINUS
+
+
+ /* Level 1 Precedence */
+%token DOT
+%token L_BRACKET R_BRACKET
+%token L_PAREN   R_PAREN
+%right INCREMENT DECREMENT
 
 
 
@@ -93,20 +119,16 @@
 
 
  /* Expressions, Terms, Factors */
-expr   : term '+' expr               {}
-       | term '-' expr               {}
-       | '(' expr ')'                {}
-       | '-' expr %prec U_MINUS  {}
-       | term                        {}
-       ;
-
-term   : factor '*' term  {}
-       | factor '/' term  {}
-       | factor           {}
-       ;
-
-factor : '(' expr ')'     {}
-       | id               {}
+expr   : LIT_NUM                   {}
+       | LIT_CHAR                  {}
+       | ID                        {}
+       | expr PLUS expr            {}
+       | expr MINUS expr           {}
+       | expr ASTERISK expr        {}
+       | expr DIVIDE expr          {}
+       | expr MODULO expr          {}
+       | MINUS expr %prec U_MINUS  {}
+       | L_PAREN expr R_PAREN      {}
        ;
 
 
@@ -115,11 +137,11 @@ ifStmt          : matched_ifStmt {}
                 | open_ifStmt    {}
                 ;
 
-matched_ifStmt  : if '(' expr ')' '{' matched_ifStmt '}' else '{' matched_ifStmt '}' {}
+matched_ifStmt  : if L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE else L_BRACE matched_ifStmt R_BRACE {}
                 ;
 
-open_ifStmt     : if '(' expr ')' '{' ifStmt '}' {}
-                | if '(' expr ')' '{' matched_ifStmt '}' else '{' open_ifStmt '}'    {}
+open_ifStmt     : if L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
+                | if L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE else L_BRACE open_ifStmt R_BRACE    {}
 
 
  /* while loops */

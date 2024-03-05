@@ -56,7 +56,7 @@ void      return(VOID_TYPE);
 
 
  /* identifiers */
-{id}  {yylval = installID(); return(IDEN); }
+{id}  {yylval = installID(); return(ID); }
 
  /* parentheses, braces, brackets, punctuation */
 "("   return(L_PAREN);
