@@ -115,9 +115,8 @@ void      return(VOID_TYPE_TOKEN);
  /* Literals: ints, floating-point, chars, strings */
 (0)|(0x0)|([1-9]{digit}*)|(0x[1-9]|[a-fA-F])({digit}|[a-fA-F])*   {yylval = installNum(); return(LIT_NUM_TOKEN);    }
 ([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {yylval = installNum(); return(LIT_NUM_TOKEN);    }
- /* flex documentation says a . means one of any character */
-\'.\'                                                             {yylval = installNum(); return(LIT_CHAR_TOKEN);   }
-\".+\"                                                            {yylval = installNum(); return(LIT_STRING_TOKEN); }
+\'[^\']?\'                                                        {yylval = installNum(); return(LIT_CHAR_TOKEN);   }
+\"[^\"]*\"                                                        {yylval = installNum(); return(LIT_STRING_TOKEN); }
 
 
 %%

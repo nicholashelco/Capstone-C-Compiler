@@ -43,11 +43,8 @@
 %token QUESTION_TOKEN
 
  /* arithmetic operators */
-%token PLUS_TOKEN
-%token MINUS_TOKEN
-%token ASTERISK_TOKEN
-%token DIVIDE_TOKEN
-%token MODULO_TOKEN
+%left  PLUS_TOKEN      MINUS_TOKEN
+%left  ASTERISK_TOKEN  DIVIDE_TOKEN  MODULO_TOKEN
 %right INCREMENT_TOKEN
 %right DECREMENT_TOKEN
 %right U_MINUS
