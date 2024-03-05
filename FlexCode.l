@@ -30,93 +30,93 @@ id      (_|{letter})({letter}|{digit}|_)*
 {ws}+  { /* do nothing */ }
 
  /* Keywords */
-if        return(IF_TOK);
-else      return(ELSE_TOK);
-for       return(FOR_TOK);
-do        return(DO_TOK);
-while     return(WHILE_TOK);
-return    return(RETURN_TOK);
-break     return(BREAK_TOK);
-continue  return(CONTINUE_TOK);
+if        return(IF);
+else      return(ELSE);
+for       return(FOR);
+do        return(DO);
+while     return(WHILE);
+return    return(RETURN);
+break     return(BREAK);
+continue  return(CONTINUE);
 
-short     return(SHORT_TYPE_TOK);
-int       return(INT_TYPE_TOK);
-long      return(LONG_TYPE_TOK);
-unsigned  return(UNSIGNED_TYPE_TOK);
-float     return(FLOAT_TYPE_TOK);
-double    return(DOUBLE_TYPE_TOK);
-char      return(CHAR_TYPE_TOK);
-struct    return(STRUCT_TYPE_TOK);
-enum      return(ENUM_TYPE_TOK);
-union     return(UNION_TYPE_TOK);
-void      return(VOID_TYPE_TOK);
+short     return(SHORT_TYPE);
+int       return(INT_TYPE);
+long      return(LONG_TYPE);
+unsigned  return(UNSIGNED_TYPE);
+float     return(FLOAT_TYPE);
+double    return(DOUBLE_TYPE);
+char      return(CHAR_TYPE);
+struct    return(STRUCT_TYPE);
+enum      return(ENUM_TYPE);
+union     return(UNION_TYPE);
+void      return(VOID_TYPE);
 
 
 
 
 
  /* identifiers */
-{id}  {yylval = installID(); return(ID_TOKEN); }
+{id}  {yylval = installID(); return(IDEN); }
 
  /* parentheses, braces, brackets, punctuation */
-"("   return(L_PAREN_TOK);
-")"   return(R_PAREN_TOK);
-"["   return(L_BRACKET_TOK);
-"]"   return(R_BRACKET_TOK);
-"{"   return(L_BRACE_TOK);
-"}"   return(R_BRACE_TOK);
-","   return(COMMA_TOK);
-"."   return(DOT_TOK);
-";"   return(SEMICOLON_TOK);
-":"   return(COLON_TOK);
-"?"   return(QUESTION_TOK);
+"("   return(L_PAREN);
+")"   return(R_PAREN);
+"["   return(L_BRACKET);
+"]"   return(R_BRACKET);
+"{"   return(L_BRACE);
+"}"   return(R_BRACE);
+","   return(COMMA);
+"."   return(DOT);
+";"   return(SEMICOLON);
+":"   return(COLON);
+"?"   return(QUESTION);
 
  /* arithmetic operators */
-"+"   return(PLUS_TOK);
-"-"   return(MINUS_TOK);
-"*"   return(ASTERISK_TOK);
-"/"   return(DIVIDE_TOK);
-"%"   return(MODULO_TOK);
-"++"  return(INCREMENT_TOK);
-"--"  return(DECREMENT_TOK);
+"+"   return(PLUS);
+"-"   return(MINUS);
+"*"   return(ASTERISK);
+"/"   return(DIVIDE);
+"%"   return(MODULO);
+"++"  return(INCREMENT);
+"--"  return(DECREMENT);
 
  /* Assignment operators */
-"="    return(ASSN_TOK);
-"+="   return(ADD_ASSN_TOK);
-"-="   return(MINUS_ASSN_TOK);
-"*="   return(MULTI_ASSN_TOK);
-"/="   return(DIVIDE_ASSN_TOK);
-"%="   return(MODULO_ASSN_TOK);
-"&="   return(AND_ASSN_TOK);
-"\|="  return(OR_ASSN_TOK);
-"^="   return(XOR_ASSN_TOK);
+"="    return(ASSN);
+"+="   return(ADD_ASSN);
+"-="   return(MINUS_ASSN);
+"*="   return(MULTI_ASSN);
+"/="   return(DIVIDE_ASSN);
+"%="   return(MODULO_ASSN);
+"&="   return(AND_ASSN);
+"\|="  return(OR_ASSN);
+"^="   return(XOR_ASSN);
 
  /* comparison operators */
-"=="  return(EQUAL_COMP_TOK);
-"!="  return(NOT_EQUAL_COMP_TOK);
-"<"   return(LESS_THAN_COMP_TOK);
-">"   return(GREATER_THAN_COMP_TOK);
-"<="  return(LESS_THAN_EQUAL_COMP_TOK);
-">="  return(GREATER_THAN_EQUAL_COMP_TOK);
+"=="  return(EQUAL_COMP);
+"!="  return(NOT_EQUAL_COMP);
+"<"   return(LESS_THAN_COMP);
+">"   return(GREATER_THAN_COMP);
+"<="  return(LESS_THAN_EQUAL_COMP);
+">="  return(GREATER_THAN_EQUAL_COMP);
 
  /* logical operators */
-"&&"    return(LOGICAL_AND_TOK);
-"\|\|"  return(LOGICAL_OR_TOK);
-"!"     return(LOGICAL_NOT_TOK);
+"&&"    return(LOGICAL_AND);
+"\|\|"  return(LOGICAL_OR);
+"!"     return(LOGICAL_NOT);
 
  /* bitwise operators */
-"&"   return(AMP_TOK);
-"\|"  return(BITWISE_OR_TOK);
-"\^"  return(BITWISE_XOR_TOK);
-"<<"  return(BITWISE_LSHIFT_TOK);
-">>"  return(BITWISE_RSHIFT_TOK);
-"~"   return(BITWISE_NOT_TOK);
+"&"   return(AMP);
+"\|"  return(BITWISE_OR);
+"\^"  return(BITWISE_XOR);
+"<<"  return(BITWISE_LSHIFT);
+">>"  return(BITWISE_RSHIFT);
+"~"   return(BITWISE_NOT);
 
  /* Literals: ints, floating-point, chars, strings */
-(0)|(0x0)|([1-9]{digit}*)|(0x[1-9]|[a-fA-F])({digit}|[a-fA-F])*   {yylval = installNum(); return(LIT_NUM_TOK);    }
-([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {yylval = installNum(); return(LIT_NUM_TOK);    }
-\'[^\']?\'                                                        {yylval = installNum(); return(LIT_CHAR_TOK);   }
-\"[^\"]*\"                                                        {yylval = installNum(); return(LIT_STRING_TOK); }
+(0)|(0x0)|([1-9]{digit}*)|(0x[1-9]|[a-fA-F])({digit}|[a-fA-F])*   {yylval = installNum(); return(LIT_NUM);    }
+([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {yylval = installNum(); return(LIT_NUM);    }
+\'[^\']?\'                                                        {yylval = installNum(); return(LIT_CHAR);   }
+\"[^\"]*\"                                                        {yylval = installNum(); return(LIT_STRING); }
 
 
 %%

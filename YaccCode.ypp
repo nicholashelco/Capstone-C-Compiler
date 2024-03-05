@@ -4,88 +4,88 @@
 %}
 
 /* keywords */
-%token IF_TOK
-%token ELSE_TOK
-%token FOR_TOK
-%token DO_TOK
-%token WHILE_TOK
-%token RETURN_TOK
-%token BREAK_TOK
-%token CONTINUE_TOK
+%token IF
+%token ELSE
+%token FOR
+%token DO
+%token WHILE
+%token RETURN
+%token BREAK
+%token CONTINUE
 
-%token SHORT_TYPE_TOK
-%token INT_TYPE_TOK
-%token LONG_TYPE_TOK
-%token UNSIGNED_TYPE_TOK
-%token FLOAT_TYPE_TOK
-%token DOUBLE_TYPE_TOK
-%token CHAR_TYPE_TOK
-%token STRUCT_TYPE_TOK
-%token ENUM_TYPE_TOK
-%token UNION_TYPE_TOK
-%token VOID_TYPE_TOK
+%token SHORT_TYPE
+%token INT_TYPE
+%token LONG_TYPE
+%token UNSIGNED_TYPE
+%token FLOAT_TYPE
+%token DOUBLE_TYPE
+%token CHAR_TYPE
+%token STRUCT_TYPE
+%token ENUM_TYPE
+%token UNION_TYPE
+%token VOID_TYPE
 
 /* identifiers */
-%token ID_TOK
+%token ID
 
  /* parentheses, braces, brackets, punctuation */
-%token L_PAREN_TOK
-%token R_PAREN_TOK
-%token L_BRACKET_TOK
-%token R_BRACKET_TOK
-%token L_BRACE_TOK
-%token R_BRACE_TOK
-%token COMMA_TOK
-%token DOT_TOK
-%token SEMICOLON_TOK
-%token COLON_TOK
-%token QUESTION_TOK
+%token L_PAREN
+%token R_PAREN
+%token L_BRACKET
+%token R_BRACKET
+%token L_BRACE
+%token R_BRACE
+%token COMMA
+%token DOT
+%token SEMICOLON
+%token COLON
+%token QUESTION
 
  /* arithmetic operators */
-%left  PLUS_TOK      MINUS_TOK
-%left  ASTERISK_TOK  DIVIDE_TOK  MODULO_TOK
-%right INCREMENT_TOK
-%right DECREMENT_TOK
-%right U_MINUS_TOK
+%left  PLUS      MINUS
+%left  ASTERISK  DIVIDE  MODULO
+%right INCREMENT
+%right DECREMENT
+%right U_MINUS
 
  /* Assignment operators */
-%token ASSN_TOK
-%token ADD_ASSN_TOK
-%token MINUS_ASSN_TOK
-%token MULTI_ASSN_TOK
-%token DIVIDE_ASSN_TOK
-%token MODULO_ASSN_TOK
-%token AND_ASSN_TOK
-%token OR_ASSN_TOK
-%token XOR_ASSN_TOK
+%token ASSN
+%token ADD_ASSN
+%token MINUS_ASSN
+%token MULTI_ASSN
+%token DIVIDE_ASSN
+%token MODULO_ASSN
+%token AND_ASSN
+%token OR_ASSN
+%token XOR_ASSN
 
  /* comparison operators */
-%token EQUAL_COMP_TOK
-%token NOT_EQUAL_COMP_TOK
-%token LESS_THAN_COMP_TOK
-%token GREATER_THAN_COMP_TOK
-%token LESS_THAN_EQUAL_COMP_TOK
-%token GREATER_THAN_EQUAL_COMP_TOK
+%token EQUAL_COMP
+%token NOT_EQUAL_COMP
+%token LESS_THAN_COMP
+%token GREATER_THAN_COMP
+%token LESS_THAN_EQUAL_COMP
+%token GREATER_THAN_EQUAL_COMP
 
  /* logical operators */
-%token LOGICAL_AND_TOK
-%token LOGICAL_OR_TOK
-%token LOGICAL_NOT_TOK
+%token LOGICAL_AND
+%token LOGICAL_OR
+%token LOGICAL_NOT
 
  /* bitwise operators */
-%token AMP_TOK
-%token BITWISE_OR_TOK
-%token BITWISE_XOR_TOK
-%token BITWISE_LSHIFT_TOK
-%token BITWISE_RSHIFT_TOK
-%token BITWISE_NOT_TOK
+%token AMP
+%token BITWISE_OR
+%token BITWISE_XOR
+%token BITWISE_LSHIFT
+%token BITWISE_RSHIFT
+%token BITWISE_NOT
 
  /* Literals: ints, floating-point, chars, strings */
-%token LIT_NUM_TOK
-%token LIT_CHAR_TOK
-%token LIT_STRING_TOK
-%token LIT_CHAR_TOK
-%token LIT_STRING_TOK
+%token LIT_NUM
+%token LIT_CHAR
+%token LIT_STRING
+%token LIT_CHAR
+%token LIT_STRING
 
 
 
@@ -96,7 +96,7 @@
 expr   : term '+' expr               {}
        | term '-' expr               {}
        | '(' expr ')'                {}
-       | '-' expr %prec U_MINUS_TOK  {}
+       | '-' expr %prec U_MINUS  {}
        | term                        {}
        ;
 
