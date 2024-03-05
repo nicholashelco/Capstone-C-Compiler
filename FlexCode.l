@@ -30,26 +30,26 @@ id      (_|{letter})({letter}|{digit}|_)*
 {ws}+  { /* do nothing */ }
 
  /* Keywords */
-if        return(IF_TOKEN);
-else      return(ELSE_TOKEN);
-for       return(FOR_TOKEN);
-do        return(DO_TOKEN);
-while     return(WHILE_TOKEN);
-return    return(RETURN_TOKEN);
-break     return(BREAK_TOKEN);
-continue  return(CONTINUE_TOKEN);
+if        return(IF_TOK);
+else      return(ELSE_TOK);
+for       return(FOR_TOK);
+do        return(DO_TOK);
+while     return(WHILE_TOK);
+return    return(RETURN_TOK);
+break     return(BREAK_TOK);
+continue  return(CONTINUE_TOK);
 
-short     return(SHORT_TYPE_TOKEN);
-int       return(INT_TYPE_TOKEN);
-long      return(LONG_TYPE_TOKEN);
-unsigned  return(UNSIGNED_TYPE_TOKEN);
-float     return(FLOAT_TYPE_TOKEN);
-double    return(DOUBLE_TYPE_TOKEN);
-char      return(CHAR_TYPE_TOKEN);
-struct    return(STRUCT_TYPE_TOKEN);
-enum      return(ENUM_TYPE_TOKEN);
-union     return(UNION_TYPE_TOKEN);
-void      return(VOID_TYPE_TOKEN);
+short     return(SHORT_TYPE_TOK);
+int       return(INT_TYPE_TOK);
+long      return(LONG_TYPE_TOK);
+unsigned  return(UNSIGNED_TYPE_TOK);
+float     return(FLOAT_TYPE_TOK);
+double    return(DOUBLE_TYPE_TOK);
+char      return(CHAR_TYPE_TOK);
+struct    return(STRUCT_TYPE_TOK);
+enum      return(ENUM_TYPE_TOK);
+union     return(UNION_TYPE_TOK);
+void      return(VOID_TYPE_TOK);
 
 
 
@@ -59,64 +59,64 @@ void      return(VOID_TYPE_TOKEN);
 {id}  {yylval = installID(); return(ID_TOKEN); }
 
  /* parentheses, braces, brackets, punctuation */
-"("   return(L_PAREN_TOKEN);
-")"   return(R_PAREN_TOKEN);
-"["   return(L_BRACKET_TOKEN);
-"]"   return(R_BRACKET_TOKEN);
-"{"   return(L_BRACE_TOKEN);
-"}"   return(R_BRACE_TOKEN);
-","   return(COMMA_TOKEN);
-"."   return(DOT_TOKEN);
-";"   return(SEMICOLON_TOKEN);
-":"   return(COLON_TOKEN);
-"?"   return(QUESTION_TOKEN);
+"("   return(L_PAREN_TOK);
+")"   return(R_PAREN_TOK);
+"["   return(L_BRACKET_TOK);
+"]"   return(R_BRACKET_TOK);
+"{"   return(L_BRACE_TOK);
+"}"   return(R_BRACE_TOK);
+","   return(COMMA_TOK);
+"."   return(DOT_TOK);
+";"   return(SEMICOLON_TOK);
+":"   return(COLON_TOK);
+"?"   return(QUESTION_TOK);
 
  /* arithmetic operators */
-"+"   return(PLUS_TOKEN);
-"-"   return(MINUS_TOKEN);
-"*"   return(ASTERISK_TOKEN);
-"/"   return(DIVIDE_TOKEN);
-"%"   return(MODULO_TOKEN);
-"++"  return(INCREMENT_TOKEN);
-"--"  return(DECREMENT_TOKEN);
+"+"   return(PLUS_TOK);
+"-"   return(MINUS_TOK);
+"*"   return(ASTERISK_TOK);
+"/"   return(DIVIDE_TOK);
+"%"   return(MODULO_TOK);
+"++"  return(INCREMENT_TOK);
+"--"  return(DECREMENT_TOK);
 
  /* Assignment operators */
-"="    return(ASSN_TOKEN);
-"+="   return(ADD_ASSN_TOKEN);
-"-="   return(MINUS_ASSN_TOKEN);
-"*="   return(MULTI_ASSN_TOKEN);
-"/="   return(DIVIDE_ASSN_TOKEN);
-"%="   return(MODULO_ASSN_TOKEN);
-"&="   return(AND_ASSN_TOKEN);
-"\|="  return(OR_ASSN_TOKEN);
-"^="   return(XOR_ASSN_TOKEN);
+"="    return(ASSN_TOK);
+"+="   return(ADD_ASSN_TOK);
+"-="   return(MINUS_ASSN_TOK);
+"*="   return(MULTI_ASSN_TOK);
+"/="   return(DIVIDE_ASSN_TOK);
+"%="   return(MODULO_ASSN_TOK);
+"&="   return(AND_ASSN_TOK);
+"\|="  return(OR_ASSN_TOK);
+"^="   return(XOR_ASSN_TOK);
 
  /* comparison operators */
-"=="  return(EQUAL_COMP_TOKEN);
-"!="  return(NOT_EQUAL_COMP_TOKEN);
-"<"   return(LESS_THAN_COMP_TOKEN);
-">"   return(GREATER_THAN_COMP_TOKEN);
-"<="  return(LESS_THAN_EQUAL_COMP_TOKEN);
-">="  return(GREATER_THAN_EQUAL_COMP_TOKEN);
+"=="  return(EQUAL_COMP_TOK);
+"!="  return(NOT_EQUAL_COMP_TOK);
+"<"   return(LESS_THAN_COMP_TOK);
+">"   return(GREATER_THAN_COMP_TOK);
+"<="  return(LESS_THAN_EQUAL_COMP_TOK);
+">="  return(GREATER_THAN_EQUAL_COMP_TOK);
 
  /* logical operators */
-"&&"    return(LOGICAL_AND_TOKEN);
-"\|\|"  return(LOGICAL_OR_TOKEN);
-"!"     return(LOGICAL_NOT_TOKEN);
+"&&"    return(LOGICAL_AND_TOK);
+"\|\|"  return(LOGICAL_OR_TOK);
+"!"     return(LOGICAL_NOT_TOK);
 
  /* bitwise operators */
-"&"   return(AMP_TOKEN);
-"\|"  return(BITWISE_OR_TOKEN);
-"\^"  return(BITWISE_XOR_TOKEN);
-"<<"  return(BITWISE_LSHIFT_TOKEN);
-">>"  return(BITWISE_RSHIFT_TOKEN);
-"~"   return(BITWISE_NOT_TOKEN);
+"&"   return(AMP_TOK);
+"\|"  return(BITWISE_OR_TOK);
+"\^"  return(BITWISE_XOR_TOK);
+"<<"  return(BITWISE_LSHIFT_TOK);
+">>"  return(BITWISE_RSHIFT_TOK);
+"~"   return(BITWISE_NOT_TOK);
 
  /* Literals: ints, floating-point, chars, strings */
-(0)|(0x0)|([1-9]{digit}*)|(0x[1-9]|[a-fA-F])({digit}|[a-fA-F])*   {yylval = installNum(); return(LIT_NUM_TOKEN);    }
-([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {yylval = installNum(); return(LIT_NUM_TOKEN);    }
-\'[^\']?\'                                                        {yylval = installNum(); return(LIT_CHAR_TOKEN);   }
-\"[^\"]*\"                                                        {yylval = installNum(); return(LIT_STRING_TOKEN); }
+(0)|(0x0)|([1-9]{digit}*)|(0x[1-9]|[a-fA-F])({digit}|[a-fA-F])*   {yylval = installNum(); return(LIT_NUM_TOK);    }
+([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {yylval = installNum(); return(LIT_NUM_TOK);    }
+\'[^\']?\'                                                        {yylval = installNum(); return(LIT_CHAR_TOK);   }
+\"[^\"]*\"                                                        {yylval = installNum(); return(LIT_STRING_TOK); }
 
 
 %%

@@ -4,89 +4,88 @@
 %}
 
 /* keywords */
-%token IF_TOKEN
-%token ELSE_TOKEN
-%token FOR_TOKEN
-%token DO_TOKEN
-%token WHILE_TOKEN
-%token RETURN_TOKEN
-%token BREAK_TOKEN
-%token CONTINUE_TOKEN
+%token IF_TOK
+%token ELSE_TOK
+%token FOR_TOK
+%token DO_TOK
+%token WHILE_TOK
+%token RETURN_TOK
+%token BREAK_TOK
+%token CONTINUE_TOK
 
-%token SHORT_TYPE_TOKEN
-%token INT_TYPE_TOKEN
-%token LONG_TYPE_TOKEN
-%token UNSIGNED_TYPE_TOKEN
-%token FLOAT_TYPE_TOKEN
-%token DOUBLE_TYPE_TOKEN
-%token CHAR_TYPE_TOKEN
-%token STRUCT_TYPE_TOKEN
-%token ENUM_TYPE_TOKEN
-%token UNION_TYPE_TOKEN
-%token VOID_TYPE_TOKEN
-
+%token SHORT_TYPE_TOK
+%token INT_TYPE_TOK
+%token LONG_TYPE_TOK
+%token UNSIGNED_TYPE_TOK
+%token FLOAT_TYPE_TOK
+%token DOUBLE_TYPE_TOK
+%token CHAR_TYPE_TOK
+%token STRUCT_TYPE_TOK
+%token ENUM_TYPE_TOK
+%token UNION_TYPE_TOK
+%token VOID_TYPE_TOK
 
 /* identifiers */
-%token ID_TOKEN
+%token ID_TOK
 
  /* parentheses, braces, brackets, punctuation */
-%token L_PAREN_TOKEN
-%token R_PAREN_TOKEN
-%token L_BRACKET_TOKEN
-%token R_BRACKET_TOKEN
-%token L_BRACE_TOKEN
-%token R_BRACE_TOKEN
-%token COMMA_TOKEN
-%token DOT_TOKEN
-%token SEMICOLON_TOKEN
-%token COLON_TOKEN
-%token QUESTION_TOKEN
+%token L_PAREN_TOK
+%token R_PAREN_TOK
+%token L_BRACKET_TOK
+%token R_BRACKET_TOK
+%token L_BRACE_TOK
+%token R_BRACE_TOK
+%token COMMA_TOK
+%token DOT_TOK
+%token SEMICOLON_TOK
+%token COLON_TOK
+%token QUESTION_TOK
 
  /* arithmetic operators */
-%left  PLUS_TOKEN      MINUS_TOKEN
-%left  ASTERISK_TOKEN  DIVIDE_TOKEN  MODULO_TOKEN
-%right INCREMENT_TOKEN
-%right DECREMENT_TOKEN
-%right U_MINUS
+%left  PLUS_TOK      MINUS_TOK
+%left  ASTERISK_TOK  DIVIDE_TOK  MODULO_TOK
+%right INCREMENT_TOK
+%right DECREMENT_TOK
+%right U_MINUS_TOK
 
  /* Assignment operators */
-%token ASSN_TOKEN
-%token ADD_ASSN_TOKEN
-%token MINUS_ASSN_TOKEN
-%token MULTI_ASSN_TOKEN
-%token DIVIDE_ASSN_TOKEN
-%token MODULO_ASSN_TOKEN
-%token AND_ASSN_TOKEN
-%token OR_ASSN_TOKEN
-%token XOR_ASSN_TOKEN
+%token ASSN_TOK
+%token ADD_ASSN_TOK
+%token MINUS_ASSN_TOK
+%token MULTI_ASSN_TOK
+%token DIVIDE_ASSN_TOK
+%token MODULO_ASSN_TOK
+%token AND_ASSN_TOK
+%token OR_ASSN_TOK
+%token XOR_ASSN_TOK
 
  /* comparison operators */
-%token EQUAL_COMP_TOKEN
-%token NOT_EQUAL_COMP_TOKEN
-%token LESS_THAN_COMP_TOKEN
-%token GREATER_THAN_COMP_TOKEN
-%token LESS_THAN_EQUAL_COMP_TOKEN
-%token GREATER_THAN_EQUAL_COMP_TOKEN
+%token EQUAL_COMP_TOK
+%token NOT_EQUAL_COMP_TOK
+%token LESS_THAN_COMP_TOK
+%token GREATER_THAN_COMP_TOK
+%token LESS_THAN_EQUAL_COMP_TOK
+%token GREATER_THAN_EQUAL_COMP_TOK
 
  /* logical operators */
-%token LOGICAL_AND_TOKEN
-%token LOGICAL_OR_TOKEN
-%token LOGICAL_NOT_TOKEN
+%token LOGICAL_AND_TOK
+%token LOGICAL_OR_TOK
+%token LOGICAL_NOT_TOK
 
  /* bitwise operators */
-%token AMP_TOKEN
-%token BITWISE_OR_TOKEN
-%token BITWISE_XOR_TOKEN
-%token BITWISE_LSHIFT_TOKEN
-%token BITWISE_RSHIFT_TOKEN
-%token BITWISE_NOT_TOKEN
+%token AMP_TOK
+%token BITWISE_OR_TOK
+%token BITWISE_XOR_TOK
+%token BITWISE_LSHIFT_TOK
+%token BITWISE_RSHIFT_TOK
+%token BITWISE_NOT_TOK
 
  /* Literals: ints, floating-point, chars, strings */
-%token LIT_NUM_TOKEN
-%token LIT_CHAR_TOKEN
-%token LIT_STRING_TOKEN
-%token LIT_CHAR_TOKEN
-%token LIT_STRING_TOKEN
+%token LIT_NUM_TOK
+%token LIT_CHAR_TOK
+%token LIT_STRING_TOK
+%token LIT_CHAR_TOK
+%token LIT_STRING_TOK
 
 
 
@@ -94,11 +93,11 @@
 
 
  /* Expressions, Terms, Factors */
-expr   : term '+' expr           {}
-       | term '-' expr           {}
-       | '(' expr ')'            {}
-       | '-' expr %prec U_MINUS  {}
-       | term                    {}
+expr   : term '+' expr               {}
+       | term '-' expr               {}
+       | '(' expr ')'                {}
+       | '-' expr %prec U_MINUS_TOK  {}
+       | term                        {}
        ;
 
 term   : factor '*' term  {}
