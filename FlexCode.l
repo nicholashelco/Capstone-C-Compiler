@@ -18,7 +18,6 @@ digit   [0-9]
 id      (_|{letter})({letter}|{digit}|_)*
 
 
-
 %%
 
 
@@ -113,7 +112,7 @@ void      return(VOID_TYPE);
 "~"   return(BITWISE_NOT);
 
  /* Literals: ints, floating-point, chars, strings */
-(0)|(0x0)|([1-9]{digit}*)|(0x[1-9]|[a-fA-F])({digit}|[a-fA-F])*   {yylval = installNum(); return(LIT_NUM);    }
+(0x([1-9]|[a-fA-F])({digit}|[a-fA-F])*)|([1-9]{digit}*)|(0x0)|(0) {yylval = installNum(); return(LIT_NUM);    }
 ([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {yylval = installNum(); return(LIT_NUM);    }
 \'[^\']?\'                                                        {yylval = installNum(); return(LIT_CHAR);   }
 \"[^\"]*\"                                                        {yylval = installNum(); return(LIT_STRING); }
