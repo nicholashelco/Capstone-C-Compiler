@@ -115,7 +115,12 @@
 
 
 
+
+
 %%
+
+ /* Grammar Section =============== */
+
 
 
  /* Expressions, Terms, Factors */
@@ -131,20 +136,89 @@ expr   : LIT_NUM                   {}
        | L_PAREN expr R_PAREN      {}
        ;
 
+ /* A data type */
+dataType : SHORT_TYPE     {}
+         | INT_TYPE       {}
+         | LONG_TYPE      {}
+         | UNSIGNED_TYPE  {}
+         | FLOAT_TYPE     {}
+         | DOUBLE_TYPE    {}
+         | CHAR_TYPE      {}
+         | STRUCT_TYPE    {}
+         | ENUM_TYPE      {}
+         | UNION_TYPE     {}
+         | VOID_TYPE      {}
+         ;
+
+
+ /* regular statements */
+stmt :  {}
+     ;
+
+
+ /* list of statements */
+stmtList :  {}
+         ;
+
 
  /* if statements */
 ifStmt          : matched_ifStmt {}
                 | open_ifStmt    {}
                 ;
 
+
 matched_ifStmt  : if L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE else L_BRACE matched_ifStmt R_BRACE {}
                 ;
 
+
 open_ifStmt     : if L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
                 | if L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE else L_BRACE open_ifStmt R_BRACE    {}
+                ;
 
 
  /* while loops */
 
 
  /* for loops */
+
+
+ /* variable declarations */
+varDec :  {}
+       ;
+
+
+ /* parameter and argument lists (variable-length) */
+paramList:  {}
+         ;
+
+
+argList :  {}
+        ;
+
+
+ /* function prototypes, declarations, calls */
+funProto : dataType ID paramList SEMICOLON  {}
+         ;
+
+
+funDec : dataType ID paramlist L_BRACE stmtList R_BRACE  {}
+       ;
+
+
+funCall : ID argList  {}
+        ;
+
+
+ /* global items */
+globalItem : funProto  {}
+           | funDec    {}
+           | varDec    {}
+           ;
+
+globalItemList :  {}
+               ;
+
+
+ /* the program */
+program : globalItemList {}
+        ;
