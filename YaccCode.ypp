@@ -127,6 +127,7 @@
 expr   : LIT_NUM                   {}
        | LIT_CHAR                  {}
        | ID                        {}
+       | funCall                   {}
        | expr PLUS expr            {}
        | expr MINUS expr           {}
        | expr ASTERISK expr        {}
@@ -135,6 +136,7 @@ expr   : LIT_NUM                   {}
        | MINUS expr %prec U_MINUS  {}
        | L_PAREN expr R_PAREN      {}
        ;
+
 
  /* A data type */
 dataType : SHORT_TYPE     {}
@@ -151,13 +153,31 @@ dataType : SHORT_TYPE     {}
          ;
 
 
+ /* An assignment operator */
+assignOp : ASSN         {}
+         | ADD_ASSN     {}
+         | MINUS_ASSN   {}
+         | MULTI_ASSN   {}
+         | DIVIDE_ASSN  {}
+         | MODULO_ASSN  {}
+         | AND_ASSN     {}
+         | OR_ASSN      {}
+         | XOR_ASSN     {}
+         ;
+
+
+
  /* regular statements */
-stmt :  {}
+stmt : funCall                   SEMICOLON  {}  /* getNum();     */
+     | dataType ID               SEMICOLON  {}  /* int x;        */
+     | dataType ID assignOp expr SEMICOLON  {}  /* int x = expr; */
+     |          ID assignOp expr SEMICOLON  {}  /* x = expr;     */
      ;
 
 
  /* list of statements */
-stmtList :  {}
+stmtList : stmt           {}
+         | stmt stmtList  {}
          ;
 
 
@@ -182,18 +202,25 @@ open_ifStmt     : if L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
  /* for loops */
 
 
- /* variable declarations */
-varDec :  {}
-       ;
-
-
  /* parameter and argument lists (variable-length) */
-paramList:  {}
-         ;
+paramList : L_PAREN R_PAREN              {}
+          | L_PAREN paramList R_PAREN    {}
+          | dataType ID                  {}
+          | dataType ID COMMA paramList  {}
+          ;
 
 
-argList :  {}
+argList : L_PAREN R_PAREN          {}
+        | L_PAREN argList R_PAREN  {}
+        | ID                       {}
+        | ID COMMA argList         {}
         ;
+
+
+ /* variable declarations */
+varDec : dataType ID               SEMICOLON  {}
+       | dataType ID assignOp expr SEMICOLON  {}
+       ;
 
 
  /* function prototypes, declarations, calls */
@@ -201,7 +228,7 @@ funProto : dataType ID paramList SEMICOLON  {}
          ;
 
 
-funDec : dataType ID paramlist L_BRACE stmtList R_BRACE  {}
+funDec : dataType ID paramList L_BRACE stmtList R_BRACE  {}
        ;
 
 
@@ -215,7 +242,9 @@ globalItem : funProto  {}
            | varDec    {}
            ;
 
-globalItemList :  {}
+
+globalItemList : globalItem                 {}
+               | globalItem globalItemList  {}
                ;
 
 
