@@ -1,7 +1,31 @@
 
-%{
+%skeleton "lalr1.cc"
+%require "3.8.1"
+%header
 
-%}
+%define api.token.raw
+
+%define api.token.constructor
+%define api.value.type variant
+%define parse.assert
+
+%code requires {
+    #include <string>
+
+    class Driver;
+}
+
+%param { Driver &d }
+
+%locations
+
+%define parse.trace
+%define parse.error detailed
+%define parse.lac full
+
+%code {
+    #include "../driver.h"
+}
 
 
  /* I used this page as a reference for precedence:               */
@@ -117,6 +141,8 @@
 
 
 
+%printer { yyo << $$; } <*>;
+
 %%
 
  /* Grammar Section =============== */
@@ -187,12 +213,12 @@ ifStmt          : matched_ifStmt {}
                 ;
 
 
-matched_ifStmt  : if L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE else L_BRACE matched_ifStmt R_BRACE {}
+matched_ifStmt  : IF L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE ELSE L_BRACE matched_ifStmt R_BRACE {}
                 ;
 
 
-open_ifStmt     : if L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
-                | if L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE else L_BRACE open_ifStmt R_BRACE    {}
+open_ifStmt     : IF L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
+                | IF L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE ELSE L_BRACE open_ifStmt R_BRACE    {}
                 ;
 
 
@@ -251,3 +277,17 @@ globalItemList : globalItem                 {}
  /* the program */
 program : globalItemList {}
         ;
+
+
+
+
+
+%%
+
+ /* User Code Section =============== */
+
+
+void yy::parser::error(const location_type &l,const std::string &m) {
+
+    std::cerr << l << ": " << m << '\n';
+}

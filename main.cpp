@@ -6,38 +6,35 @@
 #include <FlexLexer.h>
 #include <map>
 
-#include "YaccCode.tab.hpp"
+#include "driver.h"
 
 
 void doubleArr(char*, int&);
 void addToLexSymbolTable(std::string, char*, int&, int&, std::map<std::string, std::pair<uint32_t, uint32_t> > &);
 
+
 int main(int argc, char *argv[]){
 
-    // The lexical symbol table:
-    int lexemesLength = 1024;  // start with 1024 chars
-    char* lexemes = new char[lexemesLength];
-    int curOffset = 0;  // first index available for writing
+    int32_t res = 0;
+    Driver d;
 
-    lexemes[lexemesLength-1] = '\0';
-    std::map<std::string, std::pair<uint32_t, uint32_t> > LexemeTable;
-    //                             <offset,   tokenType>
+    for (int32_t i=1; i<argc ;i++)
 
-    // Add all keywords to the symbol table
+        if (argv[i] == std::string("-p"))
+            d.traceParsing = true;
 
+        else if (argv[i] == std::string("-s"))
+            d.traceScanning = true;
 
+        else if (!d.parse(argv[i]))
+            std::cout << d.result << '\n';
 
-    // load the c file named in argv
+        else
+            res = 1;
 
-
-    // pass the file to the parser
-
-
-
-
-
-    return 0;
+    return res;
 }
+
 
 /* Function to double the length of
    a char array that begins at pointer old
