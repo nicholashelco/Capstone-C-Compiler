@@ -164,18 +164,25 @@ expr   : LIT_NUM                   {}
        ;
 
 
- /* A data type */
-dataType : SHORT_TYPE     {}
-         | INT_TYPE       {}
-         | LONG_TYPE      {}
-         | UNSIGNED_TYPE  {}
-         | FLOAT_TYPE     {}
-         | DOUBLE_TYPE    {}
-         | CHAR_TYPE      {}
-         | STRUCT_TYPE    {}
-         | ENUM_TYPE      {}
-         | UNION_TYPE     {}
-         | VOID_TYPE      {}
+ /* Data Types */
+dataType : qualifierList baseType  {}
+         ;
+
+qualifierList : qualifier qualifierList  {}
+              |                          {}
+              ;
+
+qualifier : SHORT_TYPE           {}
+          | LONG_TYPE            {}
+          | LONG_TYPE LONG_TYPE  {}
+          | UNSIGNED_TYPE        {}
+          ;
+
+baseType : INT_TYPE
+         | FLOAT_TYPE
+         | DOUBLE_TYPE
+         | CHAR_TYPE
+         | VOID_TYPE
          ;
 
 
@@ -192,12 +199,14 @@ assignOp : ASSN         {}
          ;
 
 
-
  /* regular statements */
-stmt : funCall                   SEMICOLON  {}  /* getNum();     */
-     | dataType ID               SEMICOLON  {}  /* int x;        */
-     | dataType ID assignOp expr SEMICOLON  {}  /* int x = expr; */
-     |          ID assignOp expr SEMICOLON  {}  /* x = expr;     */
+stmt : expr SEMICOLON            {}  /*  expresion ;                                            */
+     | ifStmt                    {}  /*  if ( expression ) statement else statement             */
+     | whileStmt                 {}  /*  while ( expression ) statement                         */
+     | doWhileStmt               {}  /*  do statement while ( expression )                      */
+     | L_BRACE stmtList R_BRACE  {}  /*  { statementList }                                      */
+     | SEMICOLON                 {}  /*  ; (null statement)                                     */
+     | forStmt                   {}  /*  for ( expression ; expression; expression ) statement  */
      ;
 
 
@@ -223,10 +232,13 @@ open_ifStmt     : IF L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
 
 
  /* while loops */
+whileStmt :
+          ;
 
 
  /* for loops */
-
+forStmt :
+        ;
 
  /* parameter and argument lists (variable-length) */
 paramList : L_PAREN R_PAREN              {}
