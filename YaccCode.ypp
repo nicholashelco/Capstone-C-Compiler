@@ -200,7 +200,7 @@ assignOp : ASSN         {}
 
 
  /* regular statements */
-stmt : expr SEMICOLON            {}  /*  expresion ;                                            */
+stmt : expr SEMICOLON            {}  /*  expression ;                                            */
      | ifStmt                    {}  /*  if ( expression ) statement else statement             */
      | whileStmt                 {}  /*  while ( expression ) statement                         */
      | doWhileStmt               {}  /*  do statement while ( expression )                      */
@@ -232,13 +232,17 @@ open_ifStmt     : IF L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
 
 
  /* while loops */
-whileStmt :
+whileStmt : WHILE L_PAREN expr R_PAREN stmt  {}
           ;
 
 
+doWhileStmt : DO stmt WHILE L_PAREN expr R_PAREN SEMICOLON  {}
+
+
  /* for loops */
-forStmt :
+forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  {}
         ;
+
 
  /* parameter and argument lists (variable-length) */
 paramList : L_PAREN R_PAREN              {}

@@ -33,104 +33,105 @@ id      (_|{letter})({letter}|{digit}|_)*
 %%
 
  /* ================================== */
- // Rules Section */
+ /* Rules Section */
 
 
  %{
-     yy::location
-         &loc = d.location;
-
+     yy::location &loc = d.location;
      loc.step();
  %}
 
  /* Consume whitespace */
 {ws}+  loc.step();
 
- /* Keywords */
-if        return(IF);
-else      return(ELSE);
-for       return(FOR);
-do        return(DO);
-while     return(WHILE);
-return    return(RETURN);
-break     return(BREAK);
-continue  return(CONTINUE);
+yy::parser::make_(loc);
 
-short     return(SHORT_TYPE);
-int       return(INT_TYPE);
-long      return(LONG_TYPE);
-unsigned  return(UNSIGNED_TYPE);
-float     return(FLOAT_TYPE);
-double    return(DOUBLE_TYPE);
-char      return(CHAR_TYPE);
-struct    return(STRUCT_TYPE);
-enum      return(ENUM_TYPE);
-union     return(UNION_TYPE);
-void      return(VOID_TYPE);
+
+ /* Keywords */
+if        return yy::parser::make_IF       (loc);
+else      return yy::parser::make_ELSE     (loc);
+for       return yy::parser::make_FOR      (loc);
+do        return yy::parser::make_DO       (loc);
+while     return yy::parser::make_WHILE    (loc);
+return    return yy::parser::make_RETURN   (loc);
+break     return yy::parser::make_BREAK    (loc);
+continue  return yy::parser::make_CONTINUE (loc);
+
+short     return yy::parser::make_SHORT_TYPE    (loc);
+int       return yy::parser::make_INT_TYPE      (loc);
+long      return yy::parser::make_LONG_TYPE     (loc);
+unsigned  return yy::parser::make_UNSIGNED_TYPE (loc);
+float     return yy::parser::make_FLOAT_TYPE    (loc);
+double    return yy::parser::make_DOUBLE_TYPE   (loc);
+char      return yy::parser::make_CHAR_TYPE     (loc);
+struct    return yy::parser::make_STRUCT_TYPE   (loc);
+enum      return yy::parser::make_ENUM_TYPE     (loc);
+union     return yy::parser::make_UNION_TYPE    (loc);
+void      return yy::parser::make_VOID_TYPE     (loc);
 
 
  /* identifiers */
 {id}  return yy::parser::make_ID(yytext,loc);
 
  /* parentheses, braces, brackets, punctuation */
-"("   return(L_PAREN);
-")"   return(R_PAREN);
-"["   return(L_BRACKET);
-"]"   return(R_BRACKET);
-"{"   return(L_BRACE);
-"}"   return(R_BRACE);
-","   return(COMMA);
-"."   return(DOT);
-";"   return(SEMICOLON);
-":"   return(COLON);
-"?"   return(QUESTION);
+"("   return yy::parser::make_L_PAREN   (loc);
+")"   return yy::parser::make_R_PAREN   (loc);
+"["   return yy::parser::make_L_BRACKET (loc);
+"]"   return yy::parser::make_R_BRACKET (loc);
+"{"   return yy::parser::make_L_BRACE   (loc);
+"}"   return yy::parser::make_R_BRACE   (loc);
+","   return yy::parser::make_COMMA     (loc);
+"."   return yy::parser::make_DOT       (loc);
+";"   return yy::parser::make_SEMICOLON (loc);
+":"   return yy::parser::make_COLON     (loc);
+"?"   return yy::parser::make_QUESTION  (loc);
 
  /* arithmetic operators */
-"+"   return(PLUS);
-"-"   return(MINUS);
-"*"   return(ASTERISK);
-"/"   return(DIVIDE);
-"%"   return(MODULO);
-"++"  return(INCREMENT);
-"--"  return(DECREMENT);
+"+"   return yy::parser::make_PLUS      (loc);
+"-"   return yy::parser::make_MINUS     (loc);
+"*"   return yy::parser::make_ASTERISK  (loc);
+"/"   return yy::parser::make_DIVIDE    (loc);
+"%"   return yy::parser::make_MODULO    (loc);
+"++"  return yy::parser::make_INCREMENT (loc);
+"--"  return yy::parser::make_DECREMENT (loc);
 
  /* Assignment operators */
-"="    return(ASSN);
-"+="   return(ADD_ASSN);
-"-="   return(MINUS_ASSN);
-"*="   return(MULTI_ASSN);
-"/="   return(DIVIDE_ASSN);
-"%="   return(MODULO_ASSN);
-"&="   return(AND_ASSN);
-"\|="  return(OR_ASSN);
-"^="   return(XOR_ASSN);
+"="    return yy::parser::make_ASSN        (loc);
+"+="   return yy::parser::make_ADD_ASSN    (loc);
+"-="   return yy::parser::make_MINUS_ASSN  (loc);
+"*="   return yy::parser::make_MULTI_ASSN  (loc);
+"/="   return yy::parser::make_DIVIDE_ASSN (loc);
+"%="   return yy::parser::make_MODULO_ASSN (loc);
+"&="   return yy::parser::make_AND_ASSN    (loc);
+"\|="  return yy::parser::make_OR_ASSN     (loc);
+"^="   return yy::parser::make_XOR_ASSN    (loc);
 
  /* comparison operators */
-"=="  return(EQUAL_COMP);
-"!="  return(NOT_EQUAL_COMP);
-"<"   return(LESS_THAN_COMP);
-">"   return(GREATER_THAN_COMP);
-"<="  return(LESS_THAN_EQUAL_COMP);
-">="  return(GREATER_THAN_EQUAL_COMP);
+"=="  return yy::parser::make_EQUAL_COMP              (loc);
+"!="  return yy::parser::make_NOT_EQUAL_COMP          (loc);
+"<"   return yy::parser::make_LESS_THAN_COMP          (loc);
+">"   return yy::parser::make_GREATER_THAN_COMP       (loc);
+"<="  return yy::parser::make_LESS_THAN_EQUAL_COMP    (loc);
+">="  return yy::parser::make_GREATER_THAN_EQUAL_COMP (loc);
 
  /* logical operators */
-"&&"    return(LOGICAL_AND);
-"\|\|"  return(LOGICAL_OR);
-"!"     return(LOGICAL_NOT);
+"&&"    return yy::parser::make_LOGICAL_AND (loc);
+"\|\|"  return yy::parser::make_LOGICAL_OR  (loc);
+"!"     return yy::parser::make_LOGICAL_NOT (loc);
 
  /* bitwise operators */
-"&"   return(AMP);
-"\|"  return(BITWISE_OR);
-"\^"  return(BITWISE_XOR);
-"<<"  return(BITWISE_LSHIFT);
-">>"  return(BITWISE_RSHIFT);
-"~"   return(BITWISE_NOT);
+"&"   return yy::parser::make_AMP            (loc);
+"\|"  return yy::parser::make_BITWISE_OR     (loc);
+"\^"  return yy::parser::make_BITWISE_XOR    (loc);
+"<<"  return yy::parser::make_BITWISE_LSHIFT (loc);
+">>"  return yy::parser::make_BITWISE_RSHIFT (loc);
+"~"   return yy::parser::make_BITWISE_NOT    (loc);
 
  /* Literals: ints, floating-point, chars, strings */
-(0x([1-9]|[a-fA-F])({digit}|[a-fA-F])*)|([1-9]{digit}*)|(0x0)|(0) {return make_NUM(yytext,loc);    }
-([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {return make_NUM(yytext,loc);    }
-\'[^\']?\'                                                        {   }
-\"[^\"]*\"                                                        {   }
+(0x([1-9]|[a-fA-F])({digit}|[a-fA-F])*)|([1-9]{digit}*)|(0x0)|(0) {return yy::parser::make_LIT_NUM    (yytext,loc);  }
+([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {return yy::parser::make_LIT_NUM    (yytext,loc);  }
+\'[^\']?\'                                                        {return yy::parser::make_LIT_CHAR   (yytext,loc);  }
+\"[^\"]*\"                                                        {return yy::parser::make_LIT_STRING (yytext,loc);  }
 
  /* invalid input */
 .   { throw yy::parser::syntax_error(loc,"invalid character: " + std::string(yytext)); }
@@ -148,6 +149,7 @@ void      return(VOID_TYPE);
 /* User code */
 
 
+ /* TODO: rewrite this function for make_LIT_NUM? Also write new functions for make_LIT_CHAR, make_LIT_STRING? */
 yy::parser::symbol_type make_NUM(const std::string &s,const yy::parser::location_type &loc) {
 
     errno = 0;
@@ -159,6 +161,7 @@ yy::parser::symbol_type make_NUM(const std::string &s,const yy::parser::location
 
     return yy::parser::make_NUM((int)n,loc);
 }
+
 
 void Driver::scanBegin() {
 
@@ -174,8 +177,8 @@ void Driver::scanBegin() {
     }
 }
 
+
 void Driver::scanEnd() {
 
     fclose(yyin);
 }
-
