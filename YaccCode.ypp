@@ -159,6 +159,7 @@ expr   : LIT_NUM                   {}
        | expr ASTERISK expr        {}
        | expr DIVIDE expr          {}
        | expr MODULO expr          {}
+       | expr assignOp expr        {}
        | MINUS expr %prec U_MINUS  {}
        | L_PAREN expr R_PAREN      {}
        ;
@@ -244,7 +245,13 @@ forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  {}
         ;
 
 
- /* parameter and argument lists (variable-length) */
+ /* ID, parameter, argument lists (variable-length) */
+
+ idList : ID               {}
+        | ID COMMA idList  {}
+        ;
+
+
 paramList : L_PAREN R_PAREN              {}
           | L_PAREN paramList R_PAREN    {}
           | dataType ID                  {}
@@ -254,15 +261,20 @@ paramList : L_PAREN R_PAREN              {}
 
 argList : L_PAREN R_PAREN          {}
         | L_PAREN argList R_PAREN  {}
-        | ID                       {}
-        | ID COMMA argList         {}
+        | expr                     {}
+        | expr COMMA argList       {}
         ;
 
 
  /* variable declarations */
-varDec : dataType ID               SEMICOLON  {}
-       | dataType ID assignOp expr SEMICOLON  {}
+varDec : dataType idList               SEMICOLON  {}  /*  int x, y;          */
+       | dataType idList assignOp expr SEMICOLON  {}  /*  int x, y = m * 2;  */
        ;
+
+
+varDecList : varDec             {}
+           | varDec varDecList  {}
+           ;
 
 
  /* function prototypes, declarations, calls */
@@ -279,9 +291,9 @@ funCall : ID argList  {}
 
 
  /* global items */
-globalItem : funProto  {}
-           | funDec    {}
-           | varDec    {}
+globalItem : funProto      {}
+           | funDec        {}
+           | varDecList    {}
            ;
 
 
