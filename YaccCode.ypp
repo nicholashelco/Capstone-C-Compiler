@@ -25,6 +25,7 @@
 
 %code {
     #include "../driver.h"
+    #include "../SyntaxTree.h"
 }
 
 
@@ -33,9 +34,9 @@
 
 
  /* No Precedence necessary */
-%token L_BRACE
-%token R_BRACE
+%token L_BRACE R_BRACE
 %token SEMICOLON
+%token DUMMY
 
 %token IF
 %token ELSE
@@ -59,9 +60,7 @@
 %token VOID_TYPE
 
 %token ID
-%token LIT_NUM
-%token LIT_CHAR
-%token LIT_STRING
+%token LIT_NUM LIT_CHAR LIT_STRING
 
 
  /* Level 15 Precedence */
@@ -150,18 +149,18 @@
 
 
  /* Expressions, Terms, Factors */
-expr   : LIT_NUM                   {}
-       | LIT_CHAR                  {}
-       | ID                        {}
-       | funCall                   {}
-       | expr PLUS expr            {}
-       | expr MINUS expr           {}
-       | expr ASTERISK expr        {}
-       | expr DIVIDE expr          {}
-       | expr MODULO expr          {}
-       | expr assignOp expr        {}
-       | MINUS expr %prec U_MINUS  {}
-       | L_PAREN expr R_PAREN      {}
+expr   : LIT_NUM                   { st.makeLeaf(LIT_NUM, $1);  }
+       | LIT_CHAR                  { st.makeLeaf(LIT_CHAR, $1); }
+       | ID                        { st.makeLeaf(ID, $1);       }
+       | funCall                   {  }
+       | expr PLUS expr            { st.makeNode(PLUS,  $1.loc, $3.loc); }  // need a way to get locations of children in the syntax tree vector
+       | expr MINUS expr           { st.makeNode(MINUS, $1.loc, $3.loc); }
+       | expr ASTERISK expr        {  }
+       | expr DIVIDE expr          {  }
+       | expr MODULO expr          {  }
+       | expr assignOp expr        {  }
+       | MINUS expr %prec U_MINUS  {  }
+       | L_PAREN expr R_PAREN      {  }
        ;
 
 
@@ -313,6 +312,8 @@ program : globalItemList {}
 %%
 
  /* User Code Section =============== */
+
+
 
 
 void yy::parser::error(const location_type &l,const std::string &m) {

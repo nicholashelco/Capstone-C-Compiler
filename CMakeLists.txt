@@ -17,5 +17,5 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_executable(Capstone_C_Compiler main.cpp ${BISON_TestParser_OUTPUTS} ${FLEX_TestScanner_OUTPUTS}
         driver.cpp
         driver.h
-        driver.h)
+        driver.h SyntaxTree.cpp SyntaxTree.h)
 #target_link_libraries(Capstone_C_Compiler ${FLEX_LIBRARIES})
