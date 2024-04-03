@@ -26,11 +26,13 @@ class SyntaxTree {
 
         ~SyntaxTree();
 
-        // create a new node struct and append it to the vector with default sentinel values of -1 for children
-        void makeParentNode(int32_t type, int32_t l, int32_t r, std::string lex);
+        // Make an inner node with children locations l and r
+        void makeParent(int32_t type, int32_t l, int32_t r, std::string lex);
 
-        void makeDummyNode();
+        // Make a dummy node
+        void makeDummy();
 
+        // Make a leaf node
         void makeLeaf(int32_t type, std::string lex);
 
         int32_t size();

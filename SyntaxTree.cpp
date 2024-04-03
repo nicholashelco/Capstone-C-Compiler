@@ -15,8 +15,8 @@ SyntaxTree::SyntaxTree(){
 SyntaxTree::~SyntaxTree() = default;
 
 
-// Makes an inner node that has children
-void SyntaxTree::makeNode(int32_t type, int32_t l, int32_t r, std::string lex = ""){
+// Make an inner node with children locations l and r
+void SyntaxTree::makeParent(int32_t type, int32_t l, int32_t r, std::string lex = ""){
     SynNode node;
     node.nodeType = type;
     node.left = l;
@@ -28,10 +28,10 @@ void SyntaxTree::makeNode(int32_t type, int32_t l, int32_t r, std::string lex = 
 
 // TODO: implement dummy nodes
 // Makes a dummy node with children
-void SyntaxTree::makeDummyNode() {}
+void SyntaxTree::makeDummy() {}
 
 
-// Makes a leaf node with no children
+// Makes a leaf node
 void SyntaxTree::makeLeaf(int32_t type, std::string lex){
     SynNode node;
     node.nodeType = type;
