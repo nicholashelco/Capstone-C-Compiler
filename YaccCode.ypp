@@ -149,12 +149,12 @@
 
 
  /* Expressions, Terms, Factors */
-expr   : LIT_NUM                   { st.makeLeaf(LIT_NUM, $1);  }
-       | LIT_CHAR                  { st.makeLeaf(LIT_CHAR, $1); }
-       | ID                        { st.makeLeaf(ID, $1);       }
+expr   : LIT_NUM                   { $$ = d.makeLeaf(LIT_NUM, $1);    }
+       | LIT_CHAR                  { $$ = d.makeLeaf(LIT_CHAR, $1);   }
+       | ID                        { $$ = d.makeLeaf(ID, $1);         }
        | funCall                   {  }
-       | expr PLUS expr            { st.makeNode(PLUS,  $1.loc, $3.loc); }  // need a way to get locations of children in the syntax tree vector
-       | expr MINUS expr           { st.makeNode(MINUS, $1.loc, $3.loc); }
+       | expr PLUS expr            { $$ = d.makeNode(PLUS,  $1, $3);  }
+       | expr MINUS expr           { $$ = d.makeNode(MINUS, $1, $3);  }
        | expr ASTERISK expr        {  }
        | expr DIVIDE expr          {  }
        | expr MODULO expr          {  }

@@ -9,6 +9,8 @@ Driver::Driver() {
 
     traceParsing = traceScanning = false;
 
+    st = SyntaxTree();
+
     result = 0;
 }
 
@@ -20,15 +22,29 @@ int32_t Driver::parse(const std::string &fn) {
 
     scanBegin();
 
-    yy::parser
-            parse(*this);
+    yy::parser parse(*this);
 
     parse.set_debug_level(traceParsing);
 
-    int32_t
-            res = parse();
+    int32_t res = parse();
 
     scanEnd();
 
     return res;
+}
+
+
+void Driver::makeParent(int32_t type, int32_t l, int32_t r, std::string lex){
+    st.makeParent(type, l, r, lex);
+}
+
+
+void Driver::makeDummy(){
+    st.makeDummy();
+}
+
+
+// Make a leaf node
+void Driver::makeLeaf(int32_t type, std::string lex){
+    st.makeLeaf(type, lex);
 }
