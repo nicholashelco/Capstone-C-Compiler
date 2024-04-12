@@ -3,7 +3,7 @@
 //
 
 #include "SyntaxTree.h"
-#include <utility>
+#include "YaccCode.tab.hpp"
 
 
 SyntaxTree::SyntaxTree(){
@@ -21,7 +21,7 @@ SynNode* SyntaxTree::operator[](int32_t index){
 
 
 // Make an inner node with children locations l and r
-void SyntaxTree::makeParent(int32_t type, int32_t l, int32_t r, std::string lex = ""){
+void SyntaxTree::makeNode(int32_t type, int32_t l, int32_t r, std::string lex = ""){
     SynNode node;
     node.nodeType = type;
     node.left = l;
@@ -43,7 +43,7 @@ void SyntaxTree::makeDummy(int32_t type, int32_t n) {
     int pLoc = tree.size()-1;
 
     // number of dummys is 2^n
-    int nDummys = std::pow(2, n);
+    int nDummys = 2 << n;
 
     // alternate between adding left and right edges
     bool isLeft = true;
@@ -62,9 +62,9 @@ void SyntaxTree::makeDummy(int32_t type, int32_t n) {
 
         // add edge to this dummy's parent
         if(isLeft)
-            tree[pLoc] -> left  = dumLoc;
+            tree[pLoc].left  = dumLoc;
         else
-            tree[pLoc] -> right = dumLoc;
+            tree[pLoc].right = dumLoc;
 
         isLeft = !isLeft;
 
@@ -77,7 +77,7 @@ void SyntaxTree::makeDummy(int32_t type, int32_t n) {
 
 
 // Makes a leaf node
-void SyntaxTree::makeLeaf(int32_t type, std::string lex){
+void SyntaxTree::makeLeaf(int32_t type, std::string lex =""){
     SynNode node;
     node.nodeType = type;
     node.left =  -1;

@@ -46,10 +46,12 @@
 %token RETURN
 %token BREAK
 %token CONTINUE
+%token FCALL
 
 %token SHORT_TYPE
 %token INT_TYPE
 %token LONG_TYPE
+%token LONG_LONG_TYPE
 %token UNSIGNED_TYPE
 %token FLOAT_TYPE
 %token DOUBLE_TYPE
@@ -152,7 +154,7 @@
 expr   : LIT_NUM                   { $$ = d.makeLeaf(LIT_NUM,  $1);     }
        | LIT_CHAR                  { $$ = d.makeLeaf(LIT_CHAR, $1);     }
        | ID                        { $$ = d.makeLeaf(ID,       $1);     }
-       | funCall                   { }
+       | ID argList                { $$ = d.makeNode(FCALL,    $1, $3); } /* make a function call node with function name ID as left child and argList as right child */
        | expr PLUS expr            { $$ = d.makeNode(PLUS,     $1, $3); }
        | expr MINUS expr           { $$ = d.makeNode(MINUS,    $1, $3); }
        | expr ASTERISK expr        { $$ = d.makeNode(ASTERISK, $1, $3); }
@@ -173,40 +175,40 @@ qualifierList : qualifier qualifierList  {}
               |                          {}
               ;
 
-qualifier : SHORT_TYPE           { $$ = $1; }
-          | LONG_TYPE            { $$ = $1; }
-          | LONG_TYPE LONG_TYPE  { $$ = $1; }
-          | UNSIGNED_TYPE        { $$ = $1; }
+qualifier : SHORT_TYPE           { $$ = d.makeLeaf(SHORT_TYPE,     $1);          }
+          | LONG_TYPE            { $$ = d.makeLeaf(LONG_TYPE,      $1);          }
+          | LONG_TYPE LONG_TYPE  { $$ = d.makeLeaf(LONG_LONG_TYPE, "long long"); }
+          | UNSIGNED_TYPE        { $$ = d.makeLeaf(UNSIGNED_TYPE,  $1);          }
           ;
 
-baseType : INT_TYPE     { $$ = $1; }
-         | FLOAT_TYPE   { $$ = $1; }
-         | DOUBLE_TYPE  { $$ = $1; }
-         | CHAR_TYPE    { $$ = $1; }
-         | VOID_TYPE    { $$ = $1; }
+baseType : INT_TYPE     { $$ = d.makeLeaf(INT_TYPE,    $1); }
+         | FLOAT_TYPE   { $$ = d.makeLeaf(FLOAT_TYPE,  $1); }
+         | DOUBLE_TYPE  { $$ = d.makeLeaf(DOUBLE_TYPE, $1); }
+         | CHAR_TYPE    { $$ = d.makeLeaf(CHAR_TYPE,   $1); }
+         | VOID_TYPE    { $$ = d.makeLeaf(VOID_TYPE,   $1); }
          ;
 
 
  /* An assignment operator */
-assignOp : ASSN         { $$ = $1; }
-         | ADD_ASSN     { $$ = $1; }
-         | MINUS_ASSN   { $$ = $1; }
-         | MULTI_ASSN   { $$ = $1; }
-         | DIVIDE_ASSN  { $$ = $1; }
-         | MODULO_ASSN  { $$ = $1; }
-         | AND_ASSN     { $$ = $1; }
-         | OR_ASSN      { $$ = $1; }
-         | XOR_ASSN     { $$ = $1; }
+assignOp : ASSN         { $$ = d.makeLeaf(ASSN,        $1); }
+         | ADD_ASSN     { $$ = d.makeLeaf(ADD_ASSN,    $1); }
+         | MINUS_ASSN   { $$ = d.makeLeaf(MINUS_ASSN,  $1); }
+         | MULTI_ASSN   { $$ = d.makeLeaf(MULTI_ASSN,  $1); }
+         | DIVIDE_ASSN  { $$ = d.makeLeaf(DIVIDE_ASSN, $1); }
+         | MODULO_ASSN  { $$ = d.makeLeaf(MODULO_ASSN, $1); }
+         | AND_ASSN     { $$ = d.makeLeaf(AND_ASSN,    $1); }
+         | OR_ASSN      { $$ = d.makeLeaf(OR_ASSN,     $1); }
+         | XOR_ASSN     { $$ = d.makeLeaf(XOR_ASSN,    $1); }
          ;
 
 
  /* A comparison operator */
-compOp : EQUAL_COMP               { $$ = $1; }
-       | NOT_EQUAL_COMP           { $$ = $1; }
-       | GREATER_THAN_COMP        { $$ = $1; }
-       | GREATER_THAN_EQUAL_COMP  { $$ = $1; }
-       | LESS_THAN_COMP           { $$ = $1; }
-       | LESS_THAN_EQUAL_COMP     { $$ = $1; }
+compOp : EQUAL_COMP               { $$ = d.makeLeaf(EQUAL_COMP,              $1); }
+       | NOT_EQUAL_COMP           { $$ = d.makeLeaf(NOT_EQUAL_COMP,          $1); }
+       | GREATER_THAN_COMP        { $$ = d.makeLeaf(GREATER_THAN_COMP,       $1); }
+       | GREATER_THAN_EQUAL_COMP  { $$ = d.makeLeaf(GREATER_THAN_EQUAL_COMP, $1); }
+       | LESS_THAN_COMP           { $$ = d.makeLeaf(LESS_THAN_COMP,          $1); }
+       | LESS_THAN_EQUAL_COMP     { $$ = d.makeLeaf(LESS_THAN_EQUAL_COMP,    $1); }
        ;
 
 
@@ -294,10 +296,6 @@ funProto : dataType ID paramList SEMICOLON  {}
 
 funDec : dataType ID paramList L_BRACE stmtList R_BRACE  {}
        ;
-
-
-funCall : ID argList  {}
-        ;
 
 
  /* global items */
