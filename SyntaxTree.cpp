@@ -56,7 +56,7 @@ void SyntaxTree::makeDummy(int32_t type, int32_t n) {
 
         // create and push the dummy
         SynNode dum;
-        dum.nodeType = DUMMY;
+        dum.nodeType = yy::parser::token::DUMMY;
         tree.push_back(dum);
         int32_t dumLoc = tree.size();
 
@@ -84,6 +84,19 @@ void SyntaxTree::makeLeaf(int32_t type, std::string lex =""){
     node.right = -1;
     node.lexeme = std::move(lex);
     tree.push_back(node);
+}
+
+// Prints a row for each node in the tree.
+// From left-to-right, prints index, token type, left index, right index, lexeme.
+void SyntaxTree::printTree(){
+
+    int row = 0;
+
+    for(const SynNode& N : tree){
+
+        std::cout << row << ' ' << N.nodeType << ' ' << N.left << ' ' << N.right << ' ' << N.lexeme << std::endl;
+        row++;
+    }
 }
 
 

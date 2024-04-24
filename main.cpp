@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
     int32_t res = 0;
     Driver d;
 
-    for (int32_t i=1; i<argc ;i++)
+    for (int32_t i=1; i<argc; i++)
 
         if (argv[i] == std::string("-p"))
             d.traceParsing = true;
@@ -31,6 +31,9 @@ int main(int argc, char *argv[]){
 
         else
             res = 1;
+
+    d.parse(argv[0]);
+    d.printTree();
 
     return res;
 }

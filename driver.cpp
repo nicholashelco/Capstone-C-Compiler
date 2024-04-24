@@ -34,8 +34,8 @@ int32_t Driver::parse(const std::string &fn) {
 }
 
 
-void Driver::makeParent(int32_t type, int32_t l, int32_t r, std::string lex){
-    st.makeParent(type, l, r, lex);
+void Driver::makeNode(int32_t type, int32_t l, int32_t r, std::string lex){
+    st.makeNode(type, l, r, lex);
 }
 
 
@@ -47,4 +47,9 @@ void Driver::makeDummy(){
 // Make a leaf node
 void Driver::makeLeaf(int32_t type, std::string lex){
     st.makeLeaf(type, lex);
+}
+
+
+void Driver::printTree(){
+    st.printTree();
 }

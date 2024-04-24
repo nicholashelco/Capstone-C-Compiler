@@ -38,6 +38,8 @@ class SyntaxTree {
         // Make a leaf node
         void makeLeaf(int32_t type, std::string lex);
 
+        void printTree();
+
         int32_t size();
 
         bool isEmpty();

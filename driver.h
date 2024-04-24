@@ -8,6 +8,7 @@
 #include <string>
 #include <map>
 #include "YaccCode.tab.hpp"
+#include "SyntaxTree.h"
 
 #define YY_DECL yy::parser::symbol_type yylex(Driver &d)
 
@@ -33,13 +34,16 @@ public:
 
     SyntaxTree st;
 
-    void makeParent(int32_t type, int32_t l, int32_t r, std::string lex);
+    // Wrapper functions for the syntax tree:
+
+    void makeNode(int32_t type, int32_t l, int32_t r, std::string lex);
 
     void makeDummy();
 
     // Make a leaf node
     void makeLeaf(int32_t type, std::string lex);
 
+    void printTree();
 };
 
 #endif //WSLFBTEST2_DRIVER_H
