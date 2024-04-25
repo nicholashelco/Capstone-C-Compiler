@@ -29,14 +29,14 @@ class SyntaxTree {
         // Returns a reference to node at a specified index of the tree vector
         SynNode* operator[](int32_t index);
 
-        // Make an inner node with children locations l and r
-        void makeNode(int32_t type, int32_t l, int32_t r, std::string lex);
+        // Make an inner node with children locations l and r; returns this node's index in tree vector
+        int makeNode(int32_t type, int32_t l, int32_t r, std::string lex);
 
         // Make new internal node r, then add n levels of dummy node children with r as the root
         void makeDummy(int32_t r, int32_t n);
 
         // Make a leaf node
-        void makeLeaf(int32_t type, std::string lex);
+        int makeLeaf(int32_t type, std::string lex);
 
         void printTree();
 

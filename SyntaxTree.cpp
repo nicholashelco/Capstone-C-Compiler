@@ -21,13 +21,16 @@ SynNode* SyntaxTree::operator[](int32_t index){
 
 
 // Make an inner node with children locations l and r
-void SyntaxTree::makeNode(int32_t type, int32_t l, int32_t r, std::string lex = ""){
+int SyntaxTree::makeNode(int32_t type, int32_t l, int32_t r, std::string lex = ""){
     SynNode node;
     node.nodeType = type;
     node.left = l;
     node.right = r;
     node.lexeme = std::move(lex);
     tree.push_back(node);
+
+    // return this node's index in the tree vector
+    return tree.size()-1;
 }
 
 
@@ -77,13 +80,16 @@ void SyntaxTree::makeDummy(int32_t type, int32_t n) {
 
 
 // Makes a leaf node
-void SyntaxTree::makeLeaf(int32_t type, std::string lex =""){
+int  SyntaxTree::makeLeaf(int32_t type, std::string lex =""){
     SynNode node;
     node.nodeType = type;
     node.left =  -1;
     node.right = -1;
     node.lexeme = std::move(lex);
     tree.push_back(node);
+
+    // return this node's index in the tree vector
+    return tree.size()-1;
 }
 
 // Prints a row for each node in the tree.

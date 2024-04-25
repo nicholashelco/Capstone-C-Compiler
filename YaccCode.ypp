@@ -245,15 +245,15 @@ open_ifStmt     : IF L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
 
 
  /* while loops */
-whileStmt : WHILE L_PAREN expr R_PAREN stmt  {}
+whileStmt : WHILE L_PAREN expr R_PAREN stmt  { $$ = d.makeNode(WHILE, $2, $4) }
           ;
 
 
-doWhileStmt : DO stmt WHILE L_PAREN expr R_PAREN SEMICOLON  {}
+doWhileStmt : DO stmt WHILE L_PAREN expr R_PAREN SEMICOLON  { $$ = d.makeNode(DO, $2, $5) }
 
 
  /* for loops */
-forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  {}
+forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  { $$ = d.makeNode(FOR, makeNode(DUMMY, $3, $5), makeNode(DUMMY, $7, $9) ) }
         ;
 
 
