@@ -37,6 +37,9 @@
 %token L_BRACE R_BRACE
 %token SEMICOLON
 %token DUMMY
+%token NULL_STMT
+%token FUN_PROTO, FUN_DEF
+
 
 %token IF
 %token ELSE
@@ -107,8 +110,8 @@
 
 
  /* Level 6 Precedence */
-%token GREATER_THAN_COMP GREATER_THAN_EQUAL_COMP
-%token LESS_THAN_COMP    LESS_THAN_EQUAL_COMP
+%token GREATER_COMP GREATER_EQUAL_COMP
+%token LESS_COMP    LESS_EQUAL_COMP
 
 
  /* Level 5 Precedence */
@@ -151,19 +154,35 @@
 
 
  /* Expressions */
-expr   : LIT_NUM                   { $$ = d.makeLeaf(LIT_NUM,  $1);     }
-       | LIT_CHAR                  { $$ = d.makeLeaf(LIT_CHAR, $1);     }
-       | ID                        { $$ = d.makeLeaf(ID,       $1);     }
-       | ID argList                { $$ = d.makeNode(FCALL,    $1, $3); } /* make a function call node with function name ID as left child and argList as right child */
-       | expr PLUS expr            { $$ = d.makeNode(PLUS,     $1, $3); }
-       | expr MINUS expr           { $$ = d.makeNode(MINUS,    $1, $3); }
-       | expr ASTERISK expr        { $$ = d.makeNode(ASTERISK, $1, $3); }
-       | expr DIVIDE expr          { $$ = d.makeNode(DIVIDE,   $1, $3); }
-       | expr MODULO expr          { $$ = d.makeNode(MODULO,   $1, $3); }
-       | expr compOp expr          { $$ = d.makeNode($2,       $1, $3); }
-       | expr assignOp expr        { $$ = d.makeNode($2,       $1, $3); }  /* Unsure if using $2 is right */
-       | MINUS expr %prec U_MINUS  { $$ = d.makeNode(MINUS,     0, $2); }  /* Unsure if this is how to handle -expr */
-       | L_PAREN expr R_PAREN      { }
+expr   : LIT_NUM                       { $$ = d.makeLeaf(LIT_NUM,  $1);     }
+       | LIT_CHAR                      { $$ = d.makeLeaf(LIT_CHAR, $1);     }
+       | ID                            { $$ = d.makeLeaf(ID,       $1);     }
+       | ID argList                    { $$ = d.makeNode(FCALL,    $1, $3); } /* make a function call node with function name ID as left child and argList as right child */
+       | expr PLUS     expr            { $$ = d.makeNode(PLUS,     $1, $3); }
+       | expr MINUS    expr            { $$ = d.makeNode(MINUS,    $1, $3); }
+       | expr ASTERISK expr            { $$ = d.makeNode(ASTERISK, $1, $3); }
+       | expr DIVIDE   expr            { $$ = d.makeNode(DIVIDE,   $1, $3); }
+       | expr MODULO   expr            { $$ = d.makeNode(MODULO,   $1, $3); }
+
+       | expr EQUAL_COMP         expr  { $$ = d.makeNode(EQUAL_COMP,         $1, $3); }
+       | expr NOT_EQUAL_COMP     expr  { $$ = d.makeNode(NOT_EQUAL_COMP,     $1, $3); }
+       | expr GREATER_COMP       expr  { $$ = d.makeNode(GREATER_COMP,       $1, $3); }
+       | expr GREATER_EQUAL_COMP expr  { $$ = d.makeNode(GREATER_EQUAL_COMP, $1, $3); }
+       | expr LESS_COMP          expr  { $$ = d.makeNode(LESS_COMP,          $1, $3); }
+       | expr LESS_EQUAL_COMP    expr  { $$ = d.makeNode(LESS_EQUAL_COMP,    $1, $3); }
+
+       | expr ASSN        expr         { $$ = d.makeNode(ASSN,        $1, $3); }
+       | expr ADD_ASSN    expr         { $$ = d.makeNode(ADD_ASSN,    $1, $3); }
+       | expr MINUS_ASSN  expr         { $$ = d.makeNode(MINUS_ASSN,  $1, $3); }
+       | expr MULTI_ASSN  expr         { $$ = d.makeNode(MULTI_ASSN,  $1, $3); }
+       | expr DIVIDE_ASSN expr         { $$ = d.makeNode(DIVIDE_ASSN, $1, $3); }
+       | expr MODULO_ASSN expr         { $$ = d.makeNode(MODULO_ASSN, $1, $3); }
+       | expr AND_ASSN    expr         { $$ = d.makeNode(AND_ASSN,    $1, $3); }
+       | expr OR_ASSN     expr         { $$ = d.makeNode(OR_ASSN,     $1, $3); }
+       | expr XOR_ASSN    expr         { $$ = d.makeNode(XOR_ASSN,    $1, $3); }
+
+       | MINUS expr %prec U_MINUS      { $$ = d.makeNode(U_MINUS,   0, $2); }  /* Unsure if this is how to handle -expr */
+       | L_PAREN expr R_PAREN          { $$ = $1 }
        ;
 
 
@@ -189,43 +208,20 @@ baseType : INT_TYPE     { $$ = d.makeLeaf(INT_TYPE,    $1); }
          ;
 
 
- /* An assignment operator */
-assignOp : ASSN         { $$ = d.makeLeaf(ASSN,        $1); }
-         | ADD_ASSN     { $$ = d.makeLeaf(ADD_ASSN,    $1); }
-         | MINUS_ASSN   { $$ = d.makeLeaf(MINUS_ASSN,  $1); }
-         | MULTI_ASSN   { $$ = d.makeLeaf(MULTI_ASSN,  $1); }
-         | DIVIDE_ASSN  { $$ = d.makeLeaf(DIVIDE_ASSN, $1); }
-         | MODULO_ASSN  { $$ = d.makeLeaf(MODULO_ASSN, $1); }
-         | AND_ASSN     { $$ = d.makeLeaf(AND_ASSN,    $1); }
-         | OR_ASSN      { $$ = d.makeLeaf(OR_ASSN,     $1); }
-         | XOR_ASSN     { $$ = d.makeLeaf(XOR_ASSN,    $1); }
-         ;
-
-
- /* A comparison operator */
-compOp : EQUAL_COMP               { $$ = d.makeLeaf(EQUAL_COMP,              $1); }
-       | NOT_EQUAL_COMP           { $$ = d.makeLeaf(NOT_EQUAL_COMP,          $1); }
-       | GREATER_THAN_COMP        { $$ = d.makeLeaf(GREATER_THAN_COMP,       $1); }
-       | GREATER_THAN_EQUAL_COMP  { $$ = d.makeLeaf(GREATER_THAN_EQUAL_COMP, $1); }
-       | LESS_THAN_COMP           { $$ = d.makeLeaf(LESS_THAN_COMP,          $1); }
-       | LESS_THAN_EQUAL_COMP     { $$ = d.makeLeaf(LESS_THAN_EQUAL_COMP,    $1); }
-       ;
-
-
  /* regular statements */
-stmt : expr SEMICOLON            {}  /*  expression ;                                           */
-     | ifStmt                    {}  /*  if ( expression ) statement else statement             */
-     | whileStmt                 {}  /*  while ( expression ) statement                         */
-     | doWhileStmt               {}  /*  do statement while ( expression )                      */
-     | L_BRACE stmtList R_BRACE  {}  /*  { statementList }                                      */
-     | SEMICOLON                 {}  /*  ; (null statement)                                     */
-     | forStmt                   {}  /*  for ( expression ; expression; expression ) statement  */
+stmt : expr SEMICOLON            { $$ = $1 }  /*  expression ;                                           */
+     | ifStmt                    { $$ = $1 }  /*  if ( expression ) statement else statement             */
+     | whileStmt                 { $$ = $1 }  /*  while ( expression ) statement                         */
+     | doWhileStmt               { $$ = $1 }  /*  do statement while ( expression )                      */
+     | L_BRACE stmtList R_BRACE  { $$ = $2 }  /*  { statementList }                                      */
+     | NULL_STMT                 { $$ = $1 }  /*  ; (null statement)                                     */
+     | forStmt                   { $$ = $1 }  /*  for ( expression ; expression; expression ) statement  */
      ;
 
 
  /* list of statements */
-stmtList : stmt           {}
-         | stmt stmtList  {}
+stmtList : stmt           { $$ = $1 }
+         | stmt stmtList  { $$ = d.makeNode(SEMICOLON, $1, $2); }
          ;
 
 
@@ -253,14 +249,14 @@ doWhileStmt : DO stmt WHILE L_PAREN expr R_PAREN SEMICOLON  { $$ = d.makeNode(DO
 
 
  /* for loops */
-forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  { $$ = d.makeNode(FOR, makeNode(DUMMY, $3, $5), makeNode(DUMMY, $7, $9) ) }
+forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  { $$ = d.makeNode(FOR, d.makeNode(DUMMY, $3, $5), d.makeNode(DUMMY, $7, $9) ) }
         ;
 
 
  /* ID, parameter, argument lists (variable-length) */
 
- idList : ID               {}
-        | ID COMMA idList  {}
+ idList : ID               { $$ = $1 }
+        | ID COMMA idList  { $$ = d.makeNode(COMMA, $1, $3); }
         ;
 
 
@@ -290,11 +286,11 @@ varDecList : varDec             {}
 
 
  /* function prototypes, declarations, calls */
-funProto : dataType ID paramList SEMICOLON  {}
+funProto : dataType ID paramList SEMICOLON  { $$ = d.makeNode(PROTO, d.makeNode(DUMMY, $1, $2), d.makeNode(DUMMY, $3, -1) ); }
          ;
 
 
-funDec : dataType ID paramList L_BRACE stmtList R_BRACE  {}
+funDec : dataType ID paramList L_BRACE stmtList R_BRACE  { d.makeNode(FUN_DEF, d.makeNode(DUMMY, $1, $2), d.makeNode(DUMMY, $3, $5) ); }
        ;
 
 

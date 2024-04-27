@@ -109,10 +109,10 @@ void      return yy::parser::make_VOID_TYPE     (loc);
  /* comparison operators */
 "=="  return yy::parser::make_EQUAL_COMP              (loc);
 "!="  return yy::parser::make_NOT_EQUAL_COMP          (loc);
-"<"   return yy::parser::make_LESS_THAN_COMP          (loc);
-">"   return yy::parser::make_GREATER_THAN_COMP       (loc);
-"<="  return yy::parser::make_LESS_THAN_EQUAL_COMP    (loc);
-">="  return yy::parser::make_GREATER_THAN_EQUAL_COMP (loc);
+"<"   return yy::parser::make_LESS_COMP          (loc);
+">"   return yy::parser::make_GREATER_COMP       (loc);
+"<="  return yy::parser::make_LESS_EQUAL_COMP    (loc);
+">="  return yy::parser::make_GREATER_EQUAL_COMP (loc);
 
  /* logical operators */
 "&&"    return yy::parser::make_LOGICAL_AND (loc);
