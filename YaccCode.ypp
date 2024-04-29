@@ -40,6 +40,7 @@
 %token NULL_STMT
 %token FUN_PROTO, FUN_DEF
 %token IF_ELSE
+%token PARAM
 
 
 %token IF
@@ -183,7 +184,7 @@ expr   : LIT_NUM                       { $$ = d.makeLeaf(LIT_NUM,  $1);     }
        | expr XOR_ASSN    expr         { $$ = d.makeNode(XOR_ASSN,    $1, $3); }
 
        | MINUS expr %prec U_MINUS      { $$ = d.makeNode(U_MINUS,   0, $2); }  /* Unsure if this is how to handle -expr */
-       | L_PAREN expr R_PAREN          { $$ = $1 }
+       | L_PAREN expr R_PAREN          { $$ = $2 }
        ;
 
 
@@ -238,37 +239,47 @@ ifElseStmt : IF L_PAREN expr R_PAREN stmt                     ELSE stmt         
 
 
  /* while loops */
-whileStmt : WHILE L_PAREN expr R_PAREN stmt  { $$ = d.makeNode(WHILE, $2, $4) }
+whileStmt : WHILE L_PAREN expr R_PAREN stmt  { $$ = d.makeNode(WHILE, $3, $5); }
           ;
 
 
-doWhileStmt : DO stmt WHILE L_PAREN expr R_PAREN SEMICOLON  { $$ = d.makeNode(DO, $2, $5) }
+doWhileStmt : DO stmt WHILE L_PAREN expr R_PAREN SEMICOLON  { $$ = d.makeNode(DO, $2, $5); }
+            ;
 
 
  /* for loops */
-forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  { $$ = d.makeNode(FOR, d.makeNode(DUMMY, $3, $5), d.makeNode(DUMMY, $7, $9) ) }
+forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  { $$ = d.makeNode(FOR, d.makeNode(DUMMY, $3, $5), d.makeNode(DUMMY, $7, $9) ); }
         ;
 
 
  /* ID, parameter, argument lists (variable-length) */
 
- idList : ID               { $$ = $1 }
-        | ID COMMA idList  { $$ = d.makeNode(COMMA, $1, $3); }
-        ;
+idList : ID               { $$ = $1 }
+       | ID COMMA idList  { $$ = d.makeNode(COMMA, $1, $3); }
+       ;
 
 
-paramList : L_PAREN R_PAREN              {}
-          | L_PAREN paramList R_PAREN    {}
-          | dataType ID                  {}
-          | dataType ID COMMA paramList  {}
+exprList : /* empty */      { }
+         | expr             { $$ = $1 }
+         | expr COMMA expr  { $$ = d.makeNode(COMMA, $1, $3); }
+         ;
+
+
+argListCall : | L_PAREN exprList R_PAREN  { $$ = $2 }
+            ;
+
+
+parameter : dataType ID  { $$ = d.makeNode(PARAM, $1, $2); }
           ;
 
 
-argList : L_PAREN R_PAREN          {}
-        | L_PAREN argList R_PAREN  {}
-        | expr                     {}
-        | expr COMMA argList       {}
-        ;
+paramList : /* empty */                { }
+          | parameter                  { $$ = $1 }
+          | parameter COMMA paramList  { $$ = d.makeNode(COMMA, $1, $3); }
+
+
+paramListCall : L_PAREN paramList R_PAREN { $$ = $2 }
+          ;
 
 
  /* variable declarations */
