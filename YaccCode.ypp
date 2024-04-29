@@ -39,6 +39,7 @@
 %token DUMMY
 %token NULL_STMT
 %token FUN_PROTO, FUN_DEF
+%token IF_ELSE
 
 
 %token IF
@@ -226,18 +227,14 @@ stmtList : stmt           { $$ = $1 }
 
 
  /* if statements */
-ifStmt          : matched_ifStmt {}
-                | open_ifStmt    {}
-                ;
+ifStmt     : IF L_PAREN expr R_PAREN stmt                      { $$ = d.makeNode(IF, $3, $5); }
+           | IF L_PAREN expr R_PAREN L_BRACE stmtList R_BRACE  { $$ = d.makeNode(IF, $3, $6); }
+           ;
 
-
-matched_ifStmt  : IF L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE ELSE L_BRACE matched_ifStmt R_BRACE {}
-                ;
-
-
-open_ifStmt     : IF L_PAREN expr R_PAREN L_BRACE ifStmt R_BRACE {}
-                | IF L_PAREN expr R_PAREN L_BRACE matched_ifStmt R_BRACE ELSE L_BRACE open_ifStmt R_BRACE    {}
-                ;
+ifElseStmt : IF L_PAREN expr R_PAREN stmt                     ELSE stmt                      { $$ = d.makeNode(IF_ELSE, d.makeNode(DUMMY, $3, $5), $7  ); }
+           | IF L_PAREN expr R_PAREN L_BRACE stmtList R_BRACE ELSE stmt                      { $$ = d.makeNode(IF_ELSE, d.makeNode(DUMMY, $3, $6), $9  ); }
+           | IF L_PAREN expr R_PAREN stmt                     ELSE L_BRACE stmtList R_BRACE  { $$ = d.makeNode(IF_ELSE, d.makeNode(DUMMY, $3, $5), $8  ); }
+           | IF L_PAREN expr R_PAREN L_BRACE stmtList R_BRACE ELSE L_BRACE stmtList R_BRACE  { $$ = d.makeNode(IF_ELSE, d.makeNode(DUMMY, $3, $6), $10 ); }
 
 
  /* while loops */
@@ -286,11 +283,11 @@ varDecList : varDec             {}
 
 
  /* function prototypes, declarations, calls */
-funProto : dataType ID paramList SEMICOLON  { $$ = d.makeNode(PROTO, d.makeNode(DUMMY, $1, $2), d.makeNode(DUMMY, $3, -1) ); }
+funProto : dataType ID paramList SEMICOLON  { $$ = d.makeNode(PROTO, d.makeNode(DUMMY, $1, $2), $3 ); }
          ;
 
 
-funDec : dataType ID paramList L_BRACE stmtList R_BRACE  { d.makeNode(FUN_DEF, d.makeNode(DUMMY, $1, $2), d.makeNode(DUMMY, $3, $5) ); }
+funDec : dataType ID paramList L_BRACE stmtList R_BRACE  { $$ = d.makeNode(FUN_DEF, d.makeNode(DUMMY, $1, $2), d.makeNode(DUMMY, $3, $5) ); }
        ;
 
 
