@@ -38,7 +38,8 @@
 %token SEMICOLON
 %token DUMMY
 %token NULL_STMT
-%token FUN_PROTO, FUN_DEF
+%token VAR_DEC, FUN_PROTO, FUN_DEF
+%token DATA_TYPE
 %token IF_ELSE
 %token PARAM
 
@@ -189,11 +190,11 @@ expr   : LIT_NUM                       { $$ = d.makeLeaf(LIT_NUM,  $1);     }
 
 
  /* Data Types */
-dataType : qualifierList baseType  {}
+dataType : qualifierList baseType  { $$ = d.makeNode(DATA_TYPE, $1, $2); }
          ;
 
-qualifierList : qualifier qualifierList  {}
-              |                          {}
+qualifierList : qualifier qualifierList  { $$ = d.makeNode(COMMA, $1, $2); }
+              | /* empty */              { }
               ;
 
 qualifier : SHORT_TYPE           { $$ = d.makeLeaf(SHORT_TYPE,     $1);          }
@@ -283,18 +284,17 @@ paramListCall : L_PAREN paramList R_PAREN { $$ = $2 }
 
 
  /* variable declarations */
-varDec : dataType idList               SEMICOLON  {}  /*  int x, y;          */
-       | dataType idList assignOp expr SEMICOLON  {}  /*  int x, y = m * 2;  */
+varDec : dataType idList SEMICOLON  {d.makeNode(VAR_DEC, $1, $2); }  /*  int x, y;  */
        ;
 
 
-varDecList : varDec             {}
-           | varDec varDecList  {}
+varDecList : varDec             { $$ = $1 }
+           | varDec varDecList  { $$ = d.makeNode(SEMICOLON, $1, $2); }
            ;
 
 
  /* function prototypes, declarations, calls */
-funProto : dataType ID paramList SEMICOLON  { $$ = d.makeNode(PROTO, d.makeNode(DUMMY, $1, $2), $3 ); }
+funProto : dataType ID paramList SEMICOLON  { $$ = d.makeNode(FUN_PROTO, d.makeNode(DUMMY, $1, $2), $3 ); }
          ;
 
 
@@ -303,19 +303,19 @@ funDec : dataType ID paramList L_BRACE stmtList R_BRACE  { $$ = d.makeNode(FUN_D
 
 
  /* global items */
-globalItem : funProto      {}
-           | funDec        {}
-           | varDecList    {}
+globalItem : funProto    { $$ = $1 }
+           | funDec      { $$ = $1 }
+           | varDecList  { $$ = $1 }
            ;
 
 
-globalItemList : globalItem                 {}
-               | globalItem globalItemList  {}
+globalItemList : globalItem                 { $$ = $1 }
+               | globalItem globalItemList  { $$ = d.makeNode(SEMICOLON, $1, $2); }
                ;
 
 
  /* the program */
-program : globalItemList {}
+program : globalItemList { $$ = $1 }
         ;
 
 
