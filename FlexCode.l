@@ -14,7 +14,8 @@
 %option noyywrap nounput noinput batch debug
 
 %{
-    yy::parser::symbol_type make_NUM(const std::string &s,const yy::parser::location_type &loc);
+    yy::parser::symbol_type make_LIT_NUM(yy::location& loc);
+    yy::parser::symbol_type make_ID(yy::location& loc);
 %}
 
 /* Regular Definitions here */
@@ -36,10 +37,10 @@ id      (_|{letter})({letter}|{digit}|_)*
  /* Rules Section */
 
 
- %{
+%{
      yy::location &loc = d.location;
      loc.step();
- %}
+%}
 
  /* Consume whitespace */
 {ws}+  loc.step();
@@ -71,7 +72,7 @@ void      return yy::parser::make_VOID_TYPE     (loc);
 
 
  /* identifiers */
-{id}  return yy::parser::make_ID(yytext,loc);
+{id}  return make_ID(loc);
 
  /* parentheses, braces, brackets, punctuation */
 "("   return yy::parser::make_L_PAREN   (loc);
@@ -128,10 +129,10 @@ void      return yy::parser::make_VOID_TYPE     (loc);
 "~"   return yy::parser::make_BITWISE_NOT    (loc);
 
  /* Literals: ints, floating-point, chars, strings */
-(0x([1-9]|[a-fA-F])({digit}|[a-fA-F])*)|([1-9]{digit}*)|(0x0)|(0) {return yy::parser::make_LIT_NUM    (yytext,loc);  }
-([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                {return yy::parser::make_LIT_NUM    (yytext,loc);  }
-\'[^\']?\'                                                        {return yy::parser::make_LIT_CHAR   (yytext,loc);  }
-\"[^\"]*\"                                                        {return yy::parser::make_LIT_STRING (yytext,loc);  }
+(0x([1-9]|[a-fA-F])({digit}|[a-fA-F])*)|([1-9]{digit}*)|(0x0)|(0)  return yy::parser::make_LIT_NUM    (loc);
+([1-9]{digit}*\.{digit}+)([Ee][+-]?[1-9]{digit}*)?                 return yy::parser::make_LIT_NUM    (loc);
+\'[^\']?\'                                                         return yy::parser::make_LIT_CHAR   (loc);
+\"[^\"]*\"                                                         return yy::parser::make_LIT_STRING (loc);
 
  /* invalid input */
 .   { throw yy::parser::syntax_error(loc,"invalid character: " + std::string(yytext)); }
@@ -149,17 +150,29 @@ void      return yy::parser::make_VOID_TYPE     (loc);
 /* User code */
 
 
- /* TODO: rewrite this function for make_LIT_NUM? Also write new functions for make_LIT_CHAR, make_LIT_STRING? */
-yy::parser::symbol_type make_NUM(const std::string &s,const yy::parser::location_type &loc) {
+ /* rewrite this function for make_LIT_NUM? Also write new functions for make_LIT_CHAR, make_LIT_STRING? */
+yy::parser::symbol_type make_LIT_NUM(yy::location& loc) {
 
     errno = 0;
 
-    int64_t n = stoll(s,NULL,10);
+    std::string lexeme = "";
+    lexeme.append(yytext, yyleng);
+
+    // int64_t n = stoll(s,NULL,10);
+    int64_t n = stoll(lexeme, NULL, 10);
 
     if (!(-2147483648 <= n && n <= 2147483647 && errno != ERANGE))
-        throw yy::parser::syntax_error(loc,"integer is out of range: " + s);
+        throw yy::parser::syntax_error(loc,"integer is out of range: " + lexeme);
 
-    return yy::parser::make_NUM((int)n,loc);
+    return yy::parser::make_LIT_NUM(loc);
+}
+
+
+yy::parser::symbol_type make_ID(yy::location& loc) {
+
+    std::string lexeme = "";
+    lexeme.append(yytext, yyleng);
+    return yy::parser::make_ID(loc);
 }
 
 

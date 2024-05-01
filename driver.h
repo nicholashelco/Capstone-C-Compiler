@@ -38,7 +38,7 @@ public:
 
     int makeNode(int32_t type, int32_t l, int32_t r, std::string lex);
 
-    void makeDummy();
+    void makeDummy(int32_t r, int32_t n);
 
     // Make a leaf node
     int makeLeaf(int32_t type, std::string lex);

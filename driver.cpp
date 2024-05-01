@@ -39,8 +39,8 @@ int Driver::makeNode(int32_t type, int32_t l, int32_t r, std::string lex){
 }
 
 
-void Driver::makeDummy(){
-    st.makeDummy();
+void Driver::makeDummy(int32_t r, int32_t n){
+    st.makeDummy(r, n);
 }
 
 
