@@ -30,7 +30,7 @@ class SyntaxTree {
         SynNode* operator[](int32_t index);
 
         // Make an inner node with children locations l and r; returns this node's index in tree vector
-        int makeNode(int32_t type, int32_t l, int32_t r, std::string lex);
+        int makeNode(int32_t type, int32_t l, int32_t r);
 
         // Make new internal node r, then add n levels of dummy node children with r as the root
         void makeDummy(int32_t r, int32_t n);

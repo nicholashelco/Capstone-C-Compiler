@@ -34,8 +34,8 @@ int32_t Driver::parse(const std::string &fn) {
 }
 
 
-int Driver::makeNode(int32_t type, int32_t l, int32_t r, std::string lex){
-    return st.makeNode(type, l, r, lex);
+int Driver::makeNode(int TokenType, yy::parser::value_type& leftNode, yy::parser::value_type& rightNode){
+    return st.makeNode(TokenType, leftNode.as<int>(), rightNode.as<int>() );
 }
 
 

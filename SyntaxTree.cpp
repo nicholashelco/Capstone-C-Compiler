@@ -21,12 +21,12 @@ SynNode* SyntaxTree::operator[](int32_t index){
 
 
 // Make an inner node with children locations l and r
-int SyntaxTree::makeNode(int32_t type, int32_t l, int32_t r, std::string lex = ""){
+int SyntaxTree::makeNode(int32_t type, int32_t l, int32_t r){
     SynNode node;
     node.nodeType = type;
     node.left = l;
     node.right = r;
-    node.lexeme = std::move(lex);
+    node.lexeme = "";
     tree.push_back(node);
 
     // return this node's index in the tree vector

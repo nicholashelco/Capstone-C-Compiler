@@ -36,7 +36,7 @@ public:
 
     // Wrapper functions for the syntax tree:
 
-    int makeNode(int32_t type, int32_t l, int32_t r, std::string lex);
+    int makeNode(int TokenType, yy::parser::value_type&, yy::parser::value_type&);
 
     void makeDummy(int32_t r, int32_t n);
 

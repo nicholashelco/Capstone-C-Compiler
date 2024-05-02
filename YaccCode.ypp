@@ -4,7 +4,6 @@
 %header
 
 %define api.token.raw
-
 %define api.token.constructor
 %define api.value.type variant
 %define parse.assert
@@ -17,6 +16,8 @@
 
 %param { Driver &d }
 
+%start program
+
 %locations
 
 %define parse.trace
@@ -26,6 +27,7 @@
 %code {
     #include "../driver.h"
     #include "../SyntaxTree.h"
+    int MINUS_NT = 4;
 }
 
 
@@ -42,6 +44,7 @@
 %token DATA_TYPE
 %token IF_ELSE
 %token PARAM
+%token LIST_NODE
 
 
 %token IF
@@ -155,17 +158,16 @@
  /* Grammar Section =============== */
 
 
-
  /* Expressions */
 expr   : LIT_NUM                       { $$ = d.makeLeaf(LIT_NUM,  $1);     }
        | LIT_CHAR                      { $$ = d.makeLeaf(LIT_CHAR, $1);     }
-       | ID                            { $$ = d.makeLeaf(ID,       $1);     }
-       | ID argListCall                { $$ = d.makeNode(FCALL,    $1, $2); } /* make a function call node with function name ID as left child and argList as right child */
-       | expr PLUS     expr            { $$ = d.makeNode(PLUS,     $1, $3); }
-       | expr MINUS    expr            { $$ = d.makeNode( (int)yy::parser::token::MINUS, $1, $3); }
-       | expr ASTERISK expr            { $$ = d.makeNode(ASTERISK, $1, $3); }
-       | expr DIVIDE   expr            { $$ = d.makeNode(DIVIDE,   $1, $3); }
-       | expr MODULO   expr            { $$ = d.makeNode(MODULO,   $1, $3); }
+       | ID                            { $$ = d.makeLeaf(yy::parser::token::ID,       $1);     }
+       | ID argListCall                { $$ = d.makeNode(yy::parser::token::FCALL,    $1, $2); } /* make a function call node with function name ID as left child and argList as right child */
+       | expr PLUS     expr            { $$ = d.makeNode(yy::parser::token::PLUS,     $1, $3); }
+       | expr MINUS    expr            { $$ = d.makeNode(yy::parser::token::MINUS, $1, $3) ;      }
+       | expr ASTERISK expr            { $$ = d.makeNode(yy::parser::token::ASTERISK, $1, $3); }
+       | expr DIVIDE   expr            { $$ = d.makeNode(yy::parser::token::DIVIDE,   $1, $3); }
+       | expr MODULO   expr            { $$ = d.makeNode(yy::parser::token::MODULO,   $1, $3); }
 
        | expr EQUAL_COMP         expr  { $$ = d.makeNode(EQUAL_COMP,         $1, $3); }
        | expr NOT_EQUAL_COMP     expr  { $$ = d.makeNode(NOT_EQUAL_COMP,     $1, $3); }
@@ -184,8 +186,8 @@ expr   : LIT_NUM                       { $$ = d.makeLeaf(LIT_NUM,  $1);     }
        | expr OR_ASSN     expr         { $$ = d.makeNode(OR_ASSN,     $1, $3); }
        | expr XOR_ASSN    expr         { $$ = d.makeNode(XOR_ASSN,    $1, $3); }
 
-       | MINUS expr %prec U_MINUS      { $$ = d.makeNode(U_MINUS,   0, $2); }  /* Unsure if this is how to handle -expr */
-       | L_PAREN expr R_PAREN          { $$ = $2 }
+       | MINUS expr %prec U_MINUS      { $$ = d.makeNode(U_MINUS,   -1, $2); }  /* Unsure if this is how to handle -expr */
+       | L_PAREN expr R_PAREN          { $$ = $2; }
        ;
 
 
@@ -193,13 +195,12 @@ expr   : LIT_NUM                       { $$ = d.makeLeaf(LIT_NUM,  $1);     }
 dataType : qualifierList baseType  { $$ = d.makeNode(DATA_TYPE, $1, $2); }
          ;
 
-qualifierList : qualifier qualifierList  { $$ = d.makeNode(COMMA, $1, $2); }
+qualifierList : qualifier qualifierList  { $$ = d.makeNode(LIST_NODE, $1, $2); }
               | /* empty */              { }
               ;
 
 qualifier : SHORT_TYPE           { $$ = d.makeLeaf(SHORT_TYPE,     $1);          }
           | LONG_TYPE            { $$ = d.makeLeaf(LONG_TYPE,      $1);          }
-          | LONG_TYPE LONG_TYPE  { $$ = d.makeLeaf(LONG_LONG_TYPE, "long long"); }
           | UNSIGNED_TYPE        { $$ = d.makeLeaf(UNSIGNED_TYPE,  $1);          }
           ;
 
@@ -212,31 +213,28 @@ baseType : INT_TYPE     { $$ = d.makeLeaf(INT_TYPE,    $1); }
 
 
  /* regular statements */
-stmt : expr SEMICOLON            { $$ = $1 }  /*  expression ;                                           */
-     | ifStmt                    { $$ = $1 }  /*  if ( expression ) statement else statement             */
-     | whileStmt                 { $$ = $1 }  /*  while ( expression ) statement                         */
-     | doWhileStmt               { $$ = $1 }  /*  do statement while ( expression )                      */
-     | L_BRACE stmtList R_BRACE  { $$ = $2 }  /*  { statementList }                                      */
-     | NULL_STMT                 { $$ = $1 }  /*  ; (null statement)                                     */
-     | forStmt                   { $$ = $1 }  /*  for ( expression ; expression; expression ) statement  */
+stmt : expr SEMICOLON            { $$ = $1; }  /*  expression ;                                           */
+     | ifStmt                    { $$ = $1; }  /*  if ( expression ) statement else statement             */
+     | whileStmt                 { $$ = $1; }  /*  while ( expression ) statement                         */
+     | doWhileStmt               { $$ = $1; }  /*  do statement while ( expression )                      */
+     | L_BRACE stmtList R_BRACE  { $$ = $2; }  /*  { statementList }                                      */
+     | SEMICOLON                 { $$ = $1; }  /*  ; (null statement)                                     */
+     | forStmt                   { $$ = $1; }  /*  for ( expression ; expression; expression ) statement  */
      ;
 
 
  /* list of statements */
-stmtList : stmt           { $$ = $1 }
-         | stmt stmtList  { $$ = d.makeNode(SEMICOLON, $1, $2); }
+stmtList : stmt           { $$ = $1; }
+         | stmt stmtList  { $$ = d.makeNode(LIST_NODE, $1, $2); }
          ;
 
 
  /* if statements */
-ifStmt     : IF L_PAREN expr R_PAREN stmt                      { $$ = d.makeNode(IF, $3, $5); }
-           | IF L_PAREN expr R_PAREN L_BRACE stmtList R_BRACE  { $$ = d.makeNode(IF, $3, $6); }
+ifStmt     : IF L_PAREN expr R_PAREN stmt  { $$ = d.makeNode(IF, $3, d.makeNode(DUMMY, $5, -1) ); }
            ;
 
-ifElseStmt : IF L_PAREN expr R_PAREN stmt                     ELSE stmt                      { $$ = d.makeNode(IF_ELSE, d.makeNode(DUMMY, $3, $5), $7  ); }
-           | IF L_PAREN expr R_PAREN L_BRACE stmtList R_BRACE ELSE stmt                      { $$ = d.makeNode(IF_ELSE, d.makeNode(DUMMY, $3, $6), $9  ); }
-           | IF L_PAREN expr R_PAREN stmt                     ELSE L_BRACE stmtList R_BRACE  { $$ = d.makeNode(IF_ELSE, d.makeNode(DUMMY, $3, $5), $8  ); }
-           | IF L_PAREN expr R_PAREN L_BRACE stmtList R_BRACE ELSE L_BRACE stmtList R_BRACE  { $$ = d.makeNode(IF_ELSE, d.makeNode(DUMMY, $3, $6), $10 ); }
+ifElseStmt : IF L_PAREN expr R_PAREN stmt ELSE stmt { $$ = d.makeNode(IF, $3, d.makeNode(DUMMY, $5, $7) ); }
+           ;
 
 
  /* while loops */
@@ -255,32 +253,31 @@ forStmt : FOR L_PAREN expr SEMICOLON expr SEMICOLON expr R_PAREN stmt  { $$ = d.
 
  /* ID, parameter, argument lists (variable-length) */
 
-idList : ID               { $$ = $1 }
-       | ID COMMA idList  { $$ = d.makeNode(COMMA, $1, $3); }
+idList : ID               { $$ = $1; }
+       | ID COMMA idList  { $$ = d.makeNode(LIST_NODE, $1, $3); }
        ;
 
 
-exprList : /* empty */      { }
-         | expr             { $$ = $1 }
-         | expr COMMA expr  { $$ = d.makeNode(COMMA, $1, $3); }
+exprList : expr                 { $$ = $1; }
+         | expr COMMA exprList  { $$ = d.makeNode(LIST_NODE, $1, $3); }
          ;
 
 
-argListCall : | L_PAREN exprList R_PAREN  { $$ = $2 }
+argListCall : L_PAREN exprList R_PAREN  { $$ = $2; }
+            | L_PAREN R_PAREN           { $$ = -1; }
             ;
 
 
 parameter : dataType ID  { $$ = d.makeNode(PARAM, $1, $2); }
           ;
 
-
-paramList : /* empty */                { }
-          | parameter                  { $$ = $1 }
-          | parameter COMMA paramList  { $$ = d.makeNode(COMMA, $1, $3); }
+paramList : parameter                  { $$ = $1; }
+          | parameter COMMA paramList  { $$ = d.makeNode(LIST_NODE, $1, $3); }
 
 
-paramListCall : L_PAREN paramList R_PAREN { $$ = $2 }
-          ;
+paramListCall : L_PAREN paramList R_PAREN { $$ = $2; }
+              | L_PAREN R_PAREN           { $$ = -1; }
+              ;
 
 
  /* variable declarations */
@@ -288,8 +285,8 @@ varDec : dataType idList SEMICOLON  {d.makeNode(VAR_DEC, $1, $2); }  /*  int x, 
        ;
 
 
-varDecList : varDec             { $$ = $1 }
-           | varDec varDecList  { $$ = d.makeNode(SEMICOLON, $1, $2); }
+varDecList : /* empty */        { $$ = -1; }
+           | varDec varDecList  { $$ = d.makeNode(LIST_NODE, $1, $2); }
            ;
 
 
@@ -298,24 +295,24 @@ funProto : dataType ID paramList SEMICOLON  { $$ = d.makeNode(FUN_PROTO, d.makeN
          ;
 
 
-funDec : dataType ID paramList L_BRACE stmtList R_BRACE  { $$ = d.makeNode(FUN_DEF, d.makeNode(DUMMY, $1, $2), d.makeNode(DUMMY, $3, $5) ); }
+funDec : dataType ID paramList L_BRACE varDecList stmtList R_BRACE  { $$ = d.makeNode(FUN_DEF, d.makeNode(DUMMY, $1, $2), d.makeNode(DUMMY, $3, d.makeNode(DUMMY, $5, $6) ) ); }
        ;
 
 
  /* global items */
-globalItem : funProto    { $$ = $1 }
-           | funDec      { $$ = $1 }
-           | varDecList  { $$ = $1 }
+globalItem : funProto    { $$ = $1; }
+           | funDec      { $$ = $1; }
+           | varDecList  { $$ = $1; }
            ;
 
 
-globalItemList : globalItem                 { $$ = $1 }
+globalItemList : globalItem                 { $$ = $1; }
                | globalItem globalItemList  { $$ = d.makeNode(SEMICOLON, $1, $2); }
                ;
 
 
  /* the program */
-program : globalItemList { $$ = $1 }
+program : globalItemList { $$ = $1; }
         ;
 
 
